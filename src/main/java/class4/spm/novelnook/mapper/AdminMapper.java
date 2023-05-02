@@ -5,7 +5,6 @@ import class4.spm.novelnook.pojo.Staff;
 import class4.spm.novelnook.pojo.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -23,6 +22,9 @@ public interface AdminMapper {
 
     @Delete("delete from staff where username = #{username}")
     void deleteStaffByUserName(String username);//用来删除
+
+    @Select("select password from staff where username = #{username}")
+    String getPasswordByUsername(String username);//用姓名查找密码
 
     /**
      * update function at Dao level
