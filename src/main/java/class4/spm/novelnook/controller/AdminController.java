@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import tool.R;
 
 import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+
 @RestController
 @CrossOrigin
 @RequestMapping("/admin")
@@ -159,5 +164,62 @@ public class AdminController {
         }
     }
 
+    /**
+     * Add new staff function
+     *
+     * @param staff param got from json data in RequestBody
+     * @return
+     */
+    @PostMapping("/staff")
+    public R addNewStaff(@RequestBody Staff staff) {
+        int flag = adminMapper.addNewStaff(staff);
 
+        if (flag > 0) {
+            return R.success(null);
+        }
+
+        return R.error("Add new staff error.\n" + "This staff maybe exist.");
+    }
+
+    /**
+     * User can upload their own pictures as their avatar
+     *
+     * @param file   pictures upload by user
+     * @param username
+     * @return
+     */
+    @PostMapping("/uploadAvatar/{username}")
+    public R uploadAvatar(MultipartFile file, @PathVariable("username") String username) {
+
+        Staff staff = (Staff) adminMapper.getStaffByUserName(username);
+
+        //judge whether file is null
+        if (file.isEmpty()) {
+            return R.error("file not exist or file type error");
+        }
+
+        //rename file
+        String originalFilename = file.getOriginalFilename();
+        //get suffix: .png, .jpg, etc;
+        String suffix = "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        //create a random file name
+        String uuid = UUID.randomUUID().toString().replace("-","");
+
+        //upload file
+        ApplicationHome applicationHome = new ApplicationHome(this.getClass());
+        String pre = applicationHome.getDir().getParentFile().getParentFile().getAbsolutePath()
+                + "\\src\\main\\resources\\static\\avatars\\";
+        String path = pre + uuid + suffix;
+        staff.setAvatar(path);
+
+        try {
+            file.transferTo(new File(path));
+            adminMapper.updateAvatarByUserName(staff);
+            return R.success(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return R.error("upload avatar fail");
+    }
+    
 }
