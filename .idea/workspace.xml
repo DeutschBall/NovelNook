@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a69acca-4383-4e0b-839c-ba61df1d9f32" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/admin/log.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/class4/spm/novelnook/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/class4/spm/novelnook/controller/AdminController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/class4/spm/novelnook/mapper/AdminMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/class4/spm/novelnook/mapper/AdminMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/class4/spm/novelnook/pojo/Staff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/class4/spm/novelnook/pojo/Staff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/admin/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/admin/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staff-management/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/staff-management/public/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +91,8 @@
       <workItem from="1682479093273" duration="11950000" />
       <workItem from="1682592500304" duration="6718000" />
       <workItem from="1682840014345" duration="7737000" />
+      <workItem from="1682848259063" duration="886000" />
+      <workItem from="1683030381823" duration="3844000" />
     </task>
     <servers />
   </component>
