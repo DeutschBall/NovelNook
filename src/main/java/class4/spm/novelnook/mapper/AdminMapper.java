@@ -40,5 +40,26 @@ public interface AdminMapper {
             "where username = #{username}")
     int updateByUserName(Staff staff);
 
+    /**
+     * add new staff function at Dao level
+     * add new staff into staff table
+     * @param staff object staff got from service
+     * @return
+     *      if return 0, insert fail
+     *      if return > 0, insert success
+     */
+    @Insert("insert into staff " +
+            "values(#{username}, #{password}, #{firstname}, #{lastname}, " +
+            "#{email}, #{telephone})")
+    int addNewStaff(Staff staff);
+
+    /**
+     * update user's avatar at Dao level
+     * update user's avatar by username
+     * @param staff
+     * @return
+     */
+    @Update("update staff set avatar = #{avatar} where username = #{username}")
+    int updateAvatarByUserName(Staff staff);
 
 }
