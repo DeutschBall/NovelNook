@@ -36,7 +36,7 @@ public interface AdminMapper {
      */
     @Update("update staff set password = #{password}, " +
             "firstname = #{firstname}, lastname = #{lastname}, " +
-            "telephone = #{telephone}, email = #{email}, avatar = #{avatar}" +
+            "telephone = #{telephone}, email = #{email}" +
             "where username = #{username}")
     int updateByUserName(Staff staff);
 
