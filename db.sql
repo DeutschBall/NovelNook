@@ -30,6 +30,8 @@ DROP TABLE IF EXISTS superuser;
 #新建 superuser表
 #brorrw、reservation表参照的都是patron的userid
 
+#5.4更改  新增returned表
+
 
 
 CREATE  TABLE IF NOT EXISTS staff(
@@ -110,6 +112,15 @@ CREATE TABLE IF NOT EXISTS reservation(
                                           PRIMARY KEY (reservationid)
 );
 
+CREATE TABLE IF NOT EXISTS returned(
+                                     borrowid VARCHAR(255) PRIMARY KEY ,
+                                     returntime DATE, #还书的实际时间，还书的ddl在borrow表中
+                                     fineamount int, #罚款金额
+                                     ispay boolean, #是否交过罚款
+                                     FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 # CREATE TABLE IF NOT EXISTS user(
 #                                    userid VARCHAR(255) PRIMARY KEY,
 #                                    username VARCHAR(255),
@@ -146,13 +157,24 @@ INSERT INTO book(bookname, press, author, publishtime, catagory, remain, introdu
 
 
 -- 生成20条随机数据 patron
-INSERT INTO patron (password, firstname, lastname, email, telephone, avatar)
-SELECT
-  CONCAT('pwd', LPAD(FLOOR(RAND() * 10000), 4, '0')) AS password,
-  CONCAT('fn', LPAD(FLOOR(RAND() * 100), 2, '0')) AS firstname,
-  CONCAT('ln', LPAD(FLOOR(RAND() * 100), 2, '0')) AS lastname,
-  CONCAT('em', LPAD(FLOOR(RAND() * 100), 2, '0'), '@example.com') AS email,
-  CONCAT('', LPAD(FLOOR(RAND() * 100000000), 8, '0')) AS telephone,
-  CONCAT('avatars/', LPAD(FLOOR(RAND() * 10) + 1, 2, '0'), '.svg') AS avatar
-FROM INFORMATION_SCHEMA.TABLES
-LIMIT 20;
+INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VALUES
+('s3cr3tp@ss', 'John', 'Doe', 'johndoe@example.com', '+1-234-567-8901', 'avatars/7.svg'),
+('7yN7UBG@vk', 'Jane', 'Smith', 'janesmith@example.com', '+1-345-678-9012', 'avatars/3.svg'),
+('p@ssw0rd123', 'Bob', 'Johnson', 'bobjohnson@example.com', '+1-456-789-0123', 'avatars/2.svg'),
+('pa$sw0rd456', 'Sarah', 'Lee', 'sarahlee@example.com', '+1-567-890-1234', 'avatars/6.svg'),
+('Qwerty123!', 'David', 'Chen', 'davidchen@example.com', '+1-678-901-2345', 'avatars/10.svg'),
+('myp@ssw0rd', 'Linda', 'Wang', 'lindawang@example.com', '+1-789-012-3456', 'avatars/5.svg'),
+('Passw0rd', 'Eric', 'Kim', 'erickim@example.com', '+1-890-123-4567', 'avatars/8.svg'),
+('starbucks', 'Emily', 'Jones', 'emilyjones@example.com', '+1-901-234-5678', 'avatars/1.svg'),
+('Hello123', 'Mark', 'Davis', 'markdavis@example.com', '+1-012-345-6789', 'avatars/9.svg'),
+('P@ssword123', 'Melissa', 'Lopez', 'melissalopez@example.com', '+1-123-456-7890', 'avatars/4.svg'),
+('sunshine', 'Chris', 'Brown', 'chrisbrown@example.com', '+1-234-567-8901', 'avatars/2.svg'),
+('pa$$word', 'Ava', 'Taylor', 'avataylor@example.com', '+1-345-678-9012', 'avatars/3.svg'),
+('qwertyuiop', 'Lucas', 'Wilson', 'lucaswilson@example.com', '+1-456-789-0123', 'avatars/6.svg'),
+('myPassword', 'Sophia', 'Martin', 'sophiamartin@example.com', '+1-567-890-1234', 'avatars/7.svg'),
+('baseball', 'Ethan', 'Flores', 'ethanflores@example.com', '+1-678-901-2345', 'avatars/10.svg'),
+('password1', 'Isabella', 'Garcia', 'isabellagarcia@example.com', '+1-789-012-3456', 'avatars/1.svg'),
+('qwerty123', 'Michael', 'Bailey', 'michaelbailey@example.com', '+1-890-123-4567', 'avatars/8.svg'),
+('hunter2', 'Daniel', 'Nguyen', 'danielnguyen@example.com', '+1-901-234-5678', 'avatars/4.svg'),
+('iloveme', 'Olivia', 'Hernandez', 'oliviahernandez@example.com', '+1-012-345-6789', 'avatars/9.svg'),
+('1234567890', 'Matthew', 'Allen', 'matthewallen@example.com', '+1-123-456-7890', 'avatars/5.svg');
