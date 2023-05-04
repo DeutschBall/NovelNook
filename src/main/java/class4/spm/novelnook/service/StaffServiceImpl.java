@@ -14,6 +14,9 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     StaffMapper staffMapper;
 
+    //过了ddl，每一天罚 1 镑（老师规定的）
+    int finePerDay = 1;
+
     // 获取所有patron信息  实现
     public List<Patron> getAllPatrons() {
         return staffMapper.getAllPatrons();

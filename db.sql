@@ -12,23 +12,16 @@ DROP TABLE IF EXISTS patron;
 DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS superuser;
 
-#第一次release后变动
-
-#要求只输一个book id来还书，只在借的时候生成borrow id，还书也输入borrow id；book表的remain依旧是实际剩余数，id依旧是一种书一个。
-# 最终book表的更改就是新增了location；由于book id依然存在，借书的时候展示的是book name，实际数据库还是跟book id关联
-
-#关于用户，要求是id、password自动生成后再给用户展示
+#关于用户，老师要求是id、password自动生成后再给用户展示， 所以：user表全拆开，userid都是自增
 #登录就用user id + passowrd，选择哪个身份就查哪个表
 
+#第一次release后变动5.3版
 
-#具体更改
-#book表 bookid自增 添加location字段;
-#patron表 userid自增 删掉username
-#staff表 username改成userid，自增
-#删除user表
-#新建 admin表
-#新建 superuser表
-#brorrw、reservation表参照的都是patron的userid
+#删除user表   		新建 admin表、superuser表
+#	patron表 	    userid自增   删掉username
+#	staff表 		 username改成userid，自增
+#book表              bookid自增 添加location字段;   添加book测试数据
+#brorrw表、reservation表       参照的都是patron的userid
 
 #5.4更改  新增returned表
 
