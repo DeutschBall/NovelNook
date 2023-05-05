@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Book {
 
-    String bookid;
+    int bookid;
     String bookname;
     String press;
     String author;
@@ -18,5 +18,7 @@ public class Book {
     int remain;
 
     String introduction;
+
+    String location;
 
 }

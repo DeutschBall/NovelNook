@@ -9,7 +9,7 @@ import java.util.Optional;
 @NoArgsConstructor
 //@Repository
 public class Staff {
-    String username;
+    int userid;
     String password;
     String firstname;
     String lastname;

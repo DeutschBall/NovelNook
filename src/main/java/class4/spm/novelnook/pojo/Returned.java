@@ -1,22 +1,27 @@
 package class4.spm.novelnook.pojo;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reservation {
+public class Returned {
 
-    int userid;
-    int bookid;
+    String borrowid;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
-    Date reservationtime;
-    String status;
+    Date returntime;
+
+    int fineamount;
+
+    boolean ispay;
+
 
 
 }

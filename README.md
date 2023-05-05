@@ -1,6 +1,26 @@
 # NovelNook
 
+## 2023 5.4  sql修改
+
+```
+#5.3 第一次release后变动
+
+#删除user表   		新建 admin表、superuser表
+#	patron表 	 userid自增   删掉username
+#	staff表 		 username改成userid，自增
+#book表 			 bookid自增 添加location字段;   添加book测试数据
+#brorrw表、reservation表参照的都是patron的userid
+
+
+#5.4更改  新增returned表
+```
+
+最新版跟release1区别很大，要修改
+
+
+
 ## 2023.4.18  
+
 Staff组 Release1
 
 1. http://localhost:8080/staff.html  Library staff面板
