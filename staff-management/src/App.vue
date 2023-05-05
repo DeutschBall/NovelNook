@@ -1,29 +1,33 @@
 <template>
   <div id="app">
-    <AdminStaff></AdminStaff>
-    <router-view v-if="isRouterAlive"/>
+    <!-- <Login></Login> -->
+    <!-- <AdminStaff></AdminStaff> -->
+    <!-- <router-view v-if="isRouterAlive"></router-view> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import AdminStaff from '@/views/AdminStaff'
+import Login from '@/views/Login'
+import Register from '@/views/Register'
 export default {
-  name: 'App',
-  provide () {
-    return {
-      reload: this.reload
-    };
-  },
-  methods: {
-    reload () {
-      this.isRouterAlive = false
-      this.$nextTick(function () {
-        this.isRouterAlive = true
-      });
-    }
-  },
+  // name: 'App',
+  // provide () {
+  //   return {
+  //     reload: this.reload
+  //   };
+  // },
+  // methods: {
+  //   reload () {
+  //     this.isRouterAlive = false
+  //     this.$nextTick(function () {
+  //       this.isRouterAlive = true
+  //     });
+  //   }
+  // },
   components: {
-    AdminStaff,
+    AdminStaff,Login,Register
   }
 }  
 </script>
