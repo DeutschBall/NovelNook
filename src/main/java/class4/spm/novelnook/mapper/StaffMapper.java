@@ -24,7 +24,7 @@ public interface StaffMapper {
     Borrow getBorrowRecord(@Param("borrowid") String borrrowid);
     //2. book remain+1
     @Update("update book set remain = remain + 1 where bookid = #{bookid}")
-    int returnBookRemain(@Param("bookid")int bookid);
+    int returnBookRemain(@Param("bookid")String bookid);
     //3. borrow status
     @Update("update borrow set status = 'returned' where borrowid = #{borrowid}")
     int returnBookBorrowStatus(@Param("borrowid")String borowid);

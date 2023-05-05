@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class admin {
 
-    int userid;
+   int userid;
     String password;
     String firstname;
     String lastname;

@@ -18,13 +18,6 @@ public class Staff {
 
     //4.30新加，在数据库中存储头像信息，
     String avatar;
-    public String getAvatar(){//从数据库中获得头像信息
-        return avatar;
-    }
-
-    public String getPassword(){
-        return password;
-    }
 
 
 /*  例子：

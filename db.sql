@@ -59,7 +59,7 @@ CREATE  TABLE IF NOT EXISTS superuser(
     avatar varchar(255)
 );
 
-
+#insert into admin values (123,'123','1','2','3','qewqe','asdad');
 CREATE  TABLE IF NOT EXISTS admin(
     userid int PRIMARY KEY AUTO_INCREMENT,
     password VARCHAR(255),
