@@ -1,0 +1,33 @@
+<!--测试登录用界面，正式发布时请大改-->
+<!--这一行用来跳转至controller层的/admin/login/方法，已经过测试，可运行成功-->
+<!--测试时最开始使用狂神的登录界面设计，但th:action方法始终无法运行-->
+<!--具体见https://blog.csdn.net/qq_62923382/article/details/126587988#:~:text=springbo,%E5%AE%A2-CSDN%E5%8D%9A%E5%AE%A2-->
+<form action="/admin/login" method="post">
+    <ul>
+        <span class="l">LOGIN IN</span>
+        <li class="w">
+            Username:<input type="text" id="staffname" name="staffname"
+                            style="background-color:rgba(255,255,255,0.2);
+                border-radius: 3px;"></br>
+            Password:&nbsp<input type="password" id="password" name="password"
+                                 style="background-color:rgba(255,255,255,0.2);
+                border-radius: 3px;"></br>
+            <p id="ts"style="color: red;font-size: small;text-align: center"
+               text="${msg}"></p>
+        </li>
+
+        <li class="q">
+
+            &nbsp;&nbsp; Rememberme: <input  type="checkbox" id="remember"
+                                             style="position: relative;top:10px;color: white;
+                   "></br>
+            <input type="submit" value="Login up" id="login"
+                   style="background-color: rgba(38,127,232,0.6);
+                       border-radius: 3px;width:70px;color:white;">
+            <input type="submit" value="logon" id="logon"
+                   style="background-color: rgba(38,127,232,0.6);
+                       border-radius: 3px;width:70px;color:white;">
+            <a href="register.html" style="font-size:smaller">register here</a>
+        </li>
+    </ul>
+</form>
