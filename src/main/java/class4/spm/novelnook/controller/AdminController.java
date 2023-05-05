@@ -9,11 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import tool.R;
 
 import java.util.List;
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
-
 @RestController
 @CrossOrigin
 @RequestMapping("/admin")
@@ -70,7 +65,7 @@ public class AdminController {
             return R.success();
         }
     }
-    
+
     /**
      * update function
      * @param staff param got from json data in RequestBody
@@ -146,7 +141,7 @@ public class AdminController {
         }
     }*/
 
-//头像设置：String在本地数据库存储，使用时可以尝试response.sendRedirect()方法
+    //头像设置：String在本地数据库存储，使用时可以尝试response.sendRedirect()方法
     //前端的话，貌似是<img src="/users/1/avatar">（？没了解过。。）
     @GetMapping("/staff/{username}/avatar")
     public R show_avatars(@PathVariable("username") String username){//用户列表展示界面显示用户头像，通过将用户头像储存在文件系统中实现
@@ -164,62 +159,5 @@ public class AdminController {
         }
     }
 
-    /**
-     * Add new staff function
-     *
-     * @param staff param got from json data in RequestBody
-     * @return
-     */
-    @PostMapping("/staff")
-    public R addNewStaff(@RequestBody Staff staff) {
-        int flag = adminMapper.addNewStaff(staff);
 
-        if (flag > 0) {
-            return R.success(null);
-        }
-
-        return R.error("Add new staff error.\n" + "This staff maybe exist.");
-    }
-
-    /**
-     * User can upload their own pictures as their avatar
-     *
-     * @param file   pictures upload by user
-     * @param username
-     * @return
-     */
-    @PostMapping("/uploadAvatar/{username}")
-    public R uploadAvatar(MultipartFile file, @PathVariable("username") String username) {
-
-        Staff staff = (Staff) adminMapper.getStaffByUserName(username);
-
-        //judge whether file is null
-        if (file.isEmpty()) {
-            return R.error("file not exist or file type error");
-        }
-
-        //rename file
-        String originalFilename = file.getOriginalFilename();
-        //get suffix: .png, .jpg, etc;
-        String suffix = "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-        //create a random file name
-        String uuid = UUID.randomUUID().toString().replace("-","");
-
-        //upload file
-        ApplicationHome applicationHome = new ApplicationHome(this.getClass());
-        String pre = applicationHome.getDir().getParentFile().getParentFile().getAbsolutePath()
-                + "\\src\\main\\resources\\static\\avatars\\";
-        String path = pre + uuid + suffix;
-        staff.setAvatar(path);
-
-        try {
-            file.transferTo(new File(path));
-            adminMapper.updateAvatarByUserName(staff);
-            return R.success(null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return R.error("upload avatar fail");
-    }
-    
 }
