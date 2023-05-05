@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS superuser;
 #brorrw表、reservation表       参照的都是patron的userid
 
 #5.4更改  新增returned表
-
+#5.5 borrow表 resvation表用的userid bookid还是varchar，改成int
 
 
 CREATE  TABLE IF NOT EXISTS staff(
@@ -84,8 +84,8 @@ CREATE TABLE IF NOT EXISTS book(
 );
 CREATE TABLE IF NOT EXISTS borrow(
                                      borrowid VARCHAR(255),
-                                     userid VARCHAR(255),
-                                     bookid VARCHAR(255),
+                                     userid int,
+                                     bookid int,
                                      borrowtime DATE,
                                      deadline DATE,
                                      status ENUM('returned','borrowing'),
@@ -96,8 +96,8 @@ CREATE TABLE IF NOT EXISTS borrow(
 
 CREATE TABLE IF NOT EXISTS reservation(
                                           reservationid VARCHAR(255),
-                                          userid VARCHAR(255),
-                                          bookid VARCHAR(255),
+                                          userid int,
+                                          bookid int,
                                           reservationtime DATE,
                                           status ENUM('canceled','waiting','satisfied'),
                                           FOREIGN KEY(userid) REFERENCES patron(userid) ON UPDATE CASCADE ON DELETE CASCADE ,
@@ -171,3 +171,7 @@ INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VAL
 ('hunter2', 'Daniel', 'Nguyen', 'danielnguyen@example.com', '+1-901-234-5678', 'avatars/4.svg'),
 ('iloveme', 'Olivia', 'Hernandez', 'oliviahernandez@example.com', '+1-012-345-6789', 'avatars/9.svg'),
 ('1234567890', 'Matthew', 'Allen', 'matthewallen@example.com', '+1-123-456-7890', 'avatars/5.svg');
+
+
+INSERT INTO borrow (borrowid, userid, bookid, borrowtime, deadline, status) VALUES
+('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing');
