@@ -14,8 +14,8 @@ import java.util.Date;
 public class Borrow {
 
     String borrowid;
-    String userid;
-    String bookid;
+    int userid;
+    int bookid;
     @JsonFormat(pattern = "yyyy-MM-dd")
     Date   borrowtime;
     @JsonFormat(pattern = "yyyy-MM-dd")

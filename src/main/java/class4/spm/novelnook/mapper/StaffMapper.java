@@ -18,18 +18,26 @@ public interface StaffMapper {
     @Select("select * from patron")
     List<Patron> getAllPatrons();
 
+    //根据userid 找patron
+    @Select("select * from patron where userid = #{userid}")
+    Patron getPatronById(@Param("userid") int userid);
+
+    //获得罚款金额
+    @Select("select * from ")
+    int getFineRule();
+
     //还书
     //1. 查借阅记录
     @Select("select * from borrow where borrowid = #{borrowid}")
     Borrow getBorrowRecord(@Param("borrowid") String borrrowid);
     //2. book remain+1
     @Update("update book set remain = remain + 1 where bookid = #{bookid}")
-    int returnBookRemain(@Param("bookid")String bookid);
+    int returnBookRemain(@Param("bookid")int bookid);
     //3. borrow status
     @Update("update borrow set status = 'returned' where borrowid = #{borrowid}")
     int returnBookBorrowStatus(@Param("borrowid")String borowid);
     //4. returned new
-    @Insert("Insert into returned(borrowid, returntime, fineamount, ispay) values (#{borrowid}, #{returntime}, #{fineamount} #{ispay})")
+    @Insert("Insert into returned(borrowid, returntime, fineamount, ispay) values (#{borrowid}, #{returntime}, #{fineamount}, #{ispay})")
     int returnBookAddReturn(Returned returned);
 
 

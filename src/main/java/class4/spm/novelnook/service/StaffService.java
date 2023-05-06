@@ -13,7 +13,10 @@ public interface StaffService {
     // 获取所有patron信息
     List<Patron> getAllPatrons();
 
+    //根据userid 找patron
+    Patron getPatronById(int userid);
+
     //还书
-    int returnBook(String borrowid, Date date);
+    int returnBook(String borrowid, Date returntime);
 
 }

@@ -51,8 +51,8 @@ public class PatronServiceImpl implements PatronService{
         Date borrowtime = new Date();
         Borrow borrow = new Borrow();
         borrow.setBorrowid(getNewBorrowId());
-        borrow.setUserid(userid);
-        borrow.setBookid(bookid);
+        //borrow.setUserid(userid);
+        //borrow.setBookid(bookid);
         borrow.setBorrowtime(borrowtime);
         borrow.setDeadline(getDeadline(borrowtime));
         borrow.setStatus("borrowing");
