@@ -2,7 +2,8 @@ package class4.spm.novelnook.mapper;
 
 
 import class4.spm.novelnook.pojo.Staff;
-import class4.spm.novelnook.pojo.User;
+/*import class4.spm.novelnook.pojo.User;*/
+import class4.spm.novelnook.pojo.admin;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +12,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface AdminMapper {
-    @Select("select * from user where userrole = 'patron'")
-    List<User> getAllPatrons();
+/*    @Select("select * from user where userrole = 'patron'")
+    List<User> getAllPatrons();*/
 
     @Select("select * from staff where username like '%${username}%'")
     List<Staff> getStaffByUserName(String username);//用来查找
@@ -25,6 +26,17 @@ public interface AdminMapper {
 
     @Select("select password from staff where username = #{username}")
     String getPasswordByUsername(String username);//用姓名查找密码
+
+
+    //admin方法：
+    @Select("select * from admin where userid like '%${userid}%'")
+    List<admin> getAdminByUserId(int userid);//用来查找
+
+    @Select("select password from admin where userid = #{userid}")
+    String getPasswordByUserid(int userid);//用id查找密码（admin表用)
+
+    @Select("select avatar from admin where userid = #{userid}")
+    String getAvatarByuserId(int  userid);//用id查找头像信息
 
     /**
      * update function at Dao level
