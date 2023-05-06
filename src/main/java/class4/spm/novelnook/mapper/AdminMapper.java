@@ -38,9 +38,12 @@ public interface AdminMapper {
     @Select("select avatar from admin where userid = #{userid}")
     String getAvatarByuserId(int  userid);//用id查找头像信息
 
+    @Select("select * from admin where userid like '%${userid}%'")
+    admin getAdminByUserId_a(int userid);//还是查找，不过返回admin类型
+
     /**
      * update function at Dao level
-     * update staff table by userid
+     * update staff table by username
      * @param staff object staff got from service
      * @return
      *       if return 0, update fail
@@ -48,9 +51,9 @@ public interface AdminMapper {
      */
     @Update("update staff set password = #{password}, " +
             "firstname = #{firstname}, lastname = #{lastname}, " +
-            "telephone = #{telephone}, email = #{email}, avatar = #{avatar} " +
-            "where userid = #{userid}")
-    int updateByUserId(Staff staff);
+            "telephone = #{telephone}, email = #{email}" +
+            "where username = #{username}")
+    int updateByUserName(Staff staff);
 
     /**
      * add new staff function at Dao level
@@ -60,9 +63,18 @@ public interface AdminMapper {
      *      if return 0, insert fail
      *      if return > 0, insert success
      */
-    @Insert("insert into staff(password, firstname, lastname, email, telephone, avatar) " +
-            "values( #{password}, #{firstname}, #{lastname}, " +
-            "#{email}, #{telephone}, #{avatar})")
+    @Insert("insert into staff " +
+            "values(#{username}, #{password}, #{firstname}, #{lastname}, " +
+            "#{email}, #{telephone})")
     int addNewStaff(Staff staff);
+
+    /**
+     * update user's avatar at Dao level
+     * update user's avatar by username
+     * @param staff
+     * @return
+     */
+    @Update("update staff set avatar = #{avatar} where username = #{username}")
+    int updateAvatarByUserName(Staff staff);
 
 }

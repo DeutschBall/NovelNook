@@ -1,3 +1,4 @@
+
 package class4.spm.novelnook.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,3 +21,4 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
         return true;
     }
 }
+
