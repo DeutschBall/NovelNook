@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS superuser;
 #5.4更改  新增returned表
 #5.5 borrow表 resvation表用的userid bookid还是varchar，改成int
 
-
+insert into staff values (123,'123','1','2','3','qewqe','asdad');
 CREATE  TABLE IF NOT EXISTS staff(
   userid int PRIMARY KEY AUTO_INCREMENT,
   password varchar(255),

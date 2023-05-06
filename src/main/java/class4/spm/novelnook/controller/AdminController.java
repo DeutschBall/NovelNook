@@ -4,20 +4,19 @@ import class4.spm.novelnook.mapper.AdminMapper;
 import class4.spm.novelnook.pojo.Staff;
 import class4.spm.novelnook.pojo.admin;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 import tool.R;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
 import java.util.List;
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
 @RestController
 @CrossOrigin
 @RequestMapping("/admin")
@@ -76,11 +75,12 @@ public class AdminController {
         //flag is used to judge whether operation is success
         int flag = adminMapper.updateByUserName(staff);
 
-        if (flag > 0) {
+        if(flag > 0) {
             return R.success(null);
         }
 
         return R.error("update fail");
+
     }
 
 
@@ -90,23 +90,42 @@ public class AdminController {
     public R login(HttpServletResponse response, @RequestParam("userid") int userid, @RequestParam("password") String password,HttpSession session) throws IOException {
         // 验证用户名和密码是否匹配
         List<admin> list = adminMapper.getAdminByUserId(userid);
+        admin Ad = adminMapper.getAdminByUserId_a(userid);
         String Password = adminMapper.getPasswordByUserid(userid);
         if (!list.isEmpty() && Password.equals(password)) {
             // 登录成功，设置cookie等
             response.addCookie(new Cookie("userid", String.valueOf(userid)));
             session.setAttribute("userid",userid);
-            return R.success(list);
+            response.sendRedirect("/admin/index.html");
+//            response.sendRedirect("/admin/logout");//测试时用此跳转测试logout
+            return R.success(Ad);
         } else {
             // 登录失败，返回错误信息和状态码
-            response.sendRedirect("/admin/login.html");//登录界面这里可以改
+            response.sendRedirect("/admin/log.html");//登录界面这里可以改
             return R.error("用户名或密码错误");
         }
     }
 
+    @GetMapping("/logout")
+    public R logout(HttpServletRequest request,HttpServletResponse response) throws IOException{
+        HttpSession session = request.getSession(false);//获取session，若session不存在返回null
+        if (session != null){//若会话无效
+            session.invalidate(); // 销毁session
+            response.sendRedirect("/admin/log.html");//返回登录界面
+            return R.success();
+        }
+        else {
+            return R.error("登出失败");
+        }
+    }
+
+
+
+
 
     //头像设置：String在本地数据库存储，使用时可以尝试response.sendRedirect()方法
     //前端的话，貌似是<img src="/users/1/avatar">（？没了解过。。）
-    @GetMapping("/staff/{username}/avatar")
+    @GetMapping("/staff/{userid}/avatar")
     public R show_avatars(@PathVariable("userid") int userid){//用户列表展示界面显示用户头像，通过将用户头像储存在文件系统中实现
         List<admin> list = adminMapper.getAdminByUserId(userid);
         String avatar = adminMapper.getAvatarByuserId(userid);
@@ -121,57 +140,6 @@ public class AdminController {
             return R.success(avatar);
         }
     }
-    
-    /**
-     * Add new staff function
-     * @param staff param got from json data in RequestBody
-     * @return
-     */
-    @PostMapping("/staff")
-    public R addNewStaff(@RequestBody Staff staff) {
 
-        int flag = adminMapper.addNewStaff(staff);
-
-        if (flag > 0) {
-            return R.success(null);
-        }
-
-        return R.error("Add new staff fail.\n" + "This staff maybe exist.");
-    }
-    
-    /**
-     * User can upload their own pictures as their avatar
-     * @param file   pictures upload by user
-     * @return
-     */
-    @PostMapping("/uploadAvatar")
-    public R uploadAvatar(MultipartFile file){
-
-        //judge whether file is null
-        if (file.isEmpty()) {
-            return R.error("file not exist or file type error");
-        }
-
-        //rename file
-        String originalFilename = file.getOriginalFilename();
-        //get suffix: .png, .jpg, etc;
-        String suffix = "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-        //create a random file name
-        String uuid = UUID.randomUUID().toString().replace("-","");
-
-        //upload file
-        ApplicationHome applicationHome = new ApplicationHome(this.getClass());
-        String pre = applicationHome.getDir().getParentFile().getParentFile().getAbsolutePath()
-                + "\\src\\main\\resources\\static\\avatars\\";
-        String path = pre + uuid + suffix;
-
-        try {
-            file.transferTo(new File(path));
-            return R.success(path);     //send path to frontend
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return R.error("upload avatar fail");
-    }
 
 }

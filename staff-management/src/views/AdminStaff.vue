@@ -17,69 +17,30 @@
                 </el-form>
 
                 <br>
-                <!-- 添加员工 -->
-                <el-button type="primary" @click="dialogAddVisible = true">Add New Staff</el-button>
-                
-                <el-dialog title="Add New Staff" :visible.sync="dialogAddVisible">
-                    <el-form :model="form">
-                        <el-upload class="avatar-uploader" action="http://localhost:8080/" :show-file-list="false"
-                            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                        <el-form-item label="firstName" :label-width="formLabelWidth">
-                            <el-input v-model="form.firstName" auto-complete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="lastName" :label-width="formLabelWidth">
-                            <el-input v-model="form.lastName" auto-complete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="userName" :label-width="formLabelWidth">
-                            <el-input v-model="form.userName" auto-complete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="password" :label-width="formLabelWidth">
-                            <el-input v-model="form.passWord" auto-complete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="telephone" :label-width="formLabelWidth">
-                            <el-input v-model="form.telephone" auto-complete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="email" :label-width="formLabelWidth">
-                            <el-input v-model="form.email" auto-complete="off"></el-input>
-                        </el-form-item>
 
-                    </el-form>
-                    <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogAddVisible = false">Quit</el-button>
-                        <el-button type="primary" @click="handleSetAdd">Save</el-button>
-                    </div>
-                </el-dialog>
-                <br>
                 <!--表格-->
                 <template>
                     <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" border>
-                        <el-table-column label="Avatar" align="center">
-                            <template slot-scope="scope">
+                        <el-table-column prop="image" label="Avatar" align="center">
+                            <template slot-scope="{ row }">
                                 <el-image style="width: auto; height: 40px; border: none; cursor: pointer"
-                                    :src="baseUrl+scope.row.avatar" ></el-image>
-                                
+                                    :src="row.image"></el-image>
                             </template>
                         </el-table-column>
                         <el-table-column prop="firstname" label="FirstName" align="center"></el-table-column>
                         <el-table-column prop="lastname" label="LastName" align="center"></el-table-column>
                         <!-- <el-table-column  label="FullName" align="center">{{ scope.row.firstName }} + {{ scope.row.lastName }}</el-table-column> -->
 
-                        <!-- 详细信息表单 -->
+
                         <el-table-column align="center" label="Operation">
                             <template slot-scope="scope">
                                 <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">Look
                                     More</el-button>
                                 <el-dialog title="Detailed Information" :visible.sync="dialogFormVisible">
                                     <el-form :model="form">
-                                        <!-- 表单内头像 -->
                                         <el-form-item label="Avatar" :label-width="formLabelWidth">
-                                            <el-image style="width: auto; height: 40px; border: none; cursor: pointer"
-                                                :src="baseUrl+form.Avatar"></el-image>
+                                            <el-input v-model="form.Avatar" auto-complete="off"></el-input>
                                         </el-form-item>
-                                        <!-- 表单内头像 -->
                                         <el-form-item label="firstName" :label-width="formLabelWidth">
                                             <el-input v-model="form.firstName" auto-complete="off"></el-input>
                                         </el-form-item>
@@ -107,8 +68,7 @@
                                     </div>
                                 </el-dialog>
                                 <el-button type="danger" size="small" @click="bandDeleteName(scope.row)">Delete</el-button>
-                                <el-dialog title="Prompt" :visible.sync="dialogVisible" width="30%"
-                                    :before-close="handleClose">
+                                <el-dialog title="Prompt" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
                                     <span>Do you confirm to delete this staff?</span>
                                     <span slot="footer" class="dialog-footer">
                                         <el-button @click="dialogVisible = false">Quit</el-button>
@@ -121,9 +81,14 @@
                 </template>
 
                 <!--分页工具条-->
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                    :background="background" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10"
-                    layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 5, 20, 30]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalCount">
                 </el-pagination>
 
             </el-main>
@@ -141,10 +106,7 @@ export default {
     name: 'admin-staff',
     data() {
         return {
-            baseUrl: 'http://localhost:8080/admin/',
-            imageUrl: '', // 头像上传的路径
             dialogTableVisible: false,
-            dialogAddVisible: false, // 添加员工表单
             dialogFormVisible: false, // 详情表单
             dialogVisible: false,   // 删除对话框
             formLabelWidth: '120px',
@@ -152,8 +114,24 @@ export default {
             totalCount: 100, // 总记录数初始化为100
             currentPage: 1, // 当前页码
             tableData: [
-              { firstname: 'jack',lastname: 'jon',
-          avatar:"../assets/logo.png",}
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'002',firstname: 'Tom',lastname: 'TIm'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'001',firstname: 'jack',lastname: 'jon'},
+              // {userid:'002',firstname: 'Tom',lastname: 'TIm'},
+              // {userid:'002',firstname: 'Tom',lastname: 'TIm'},
+              // {userid:'002',firstname: 'Tom',lastname: 'TIm'},
             ], // 接收返回的数据
             deleteName: "", // 删除的username名称
             form: { // 用来显示详情数据和更新数据
@@ -173,18 +151,18 @@ export default {
             }
         }
     },
-    mounted() { // 页面挂载完毕，请求全部数据
+    mounted() { // 页面挂载完毕，请求全部数据，记录数组长度，利于分页
         let that = this;
         axios.get("http://localhost:8080/admin/staff")
             .then(function (resp) {
                 if (resp.data.code === 1) {
                     that.tableData = resp.data.data;
-                  that.totalCount=that.tableData.length
                 } else {
                     alert(resp.data.msg);
                 }
 
             })
+      this.totalCount=this.tableData.length
     },
     methods: {
         selectByuserName(userName) {
@@ -192,7 +170,6 @@ export default {
             axios.get("http://localhost:8080/admin/staff/" + userName).then(function (resp) {
                 if (resp.data.code === 1) {
                     that.tableData = resp.data.data;
-                  that.totalCount=that.tableData.length;
                 } else {
                     alert(resp.data.msg);
                 }
@@ -209,7 +186,6 @@ export default {
                             .then(function (response) {
                                 if (response.data.code === 1) {
                                     that.tableData = response.data.data;
-                                  that.totalCount=that.tableData.length;
                                 } else {
                                     alert(response.data.msg);
                                 }
@@ -241,6 +217,7 @@ export default {
             this.dialogVisible = true;
             this.deleteName = row.username;
         },
+      // eslint-disable-next-line no-unused-vars
         handleSet(index, row) {
             let that = this;
             var params = {
@@ -270,64 +247,21 @@ export default {
                     alert(resp.data.msg);
                 }
             })
-        },
-        // 新增员工，后端还没写
-        handleSetAdd() {
-            let that = this;
-            let params= new FormData()
-          params.append('avatar', this.imageUrl)
-          params.append('username', this.form.username)
-          params.append('password', this.form.password)
-          params.append('firstname', this.form.firstname)
-          params.append('lastname', this.form.lastname)
-          params.append('telephone', this.form.telephone)
-          params.append('email', this.form.email)
-          console.log(params)
-            axios.post("http://localhost:8080/admin/staff", params).then(function (resp) {
-                if (resp.data.code === 1) {
-                    that.dialogAddVisible = false;
-                    axios.get("http://localhost:8080/admin/staff")
-                        .then(function (resp) {
-                            if (resp.data.code === 1) {
-                                that.tableData = resp.data.data;
-                            } else {
-                                alert(resp.data.msg);
-                            }
 
-                        })
-                    // that.reload();
-                } else {
-                    alert(resp.data.msg);
-                }
-            })
         },
-        handleAvatarSuccess(res, file) {
-          alert("上传成功");
-            this.imageUrl = URL.createObjectURL(file.raw);
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg'||'image/png';
-            const isLt2M = file.size / 1024 / 1024 < 2;
 
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 或PNG格式!');
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
-        },
-      //分页处理
-      //改变页面值
+      //处理分页
+      //当页面个数改变时，重新赋值pageSize
       handleSizeChange(val) {
         this.pageSize=val;
         // console.log(`每页 ${val} 条`);
       },
-      //切换页面
+      //当当前页数变化时，改变当前页面的值
       handleCurrentChange(val) {
         this.currentPage=val;
         // console.log(`当前页: ${val}`);
       },
+
     },
 
 
@@ -335,30 +269,4 @@ export default {
 </script>
 
 
-<style>
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-}
-
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
-
-.avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-}</style>
+<style></style>
