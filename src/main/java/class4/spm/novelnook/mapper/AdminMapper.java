@@ -4,6 +4,7 @@ package class4.spm.novelnook.mapper;
 import class4.spm.novelnook.pojo.Staff;
 /*import class4.spm.novelnook.pojo.User;*/
 import class4.spm.novelnook.pojo.admin;
+import class4.spm.novelnook.pojo.fine;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -42,7 +43,7 @@ public interface AdminMapper {
     admin getAdminByUserId_a(int userid);//还是查找，不过返回admin类型
 
     /**
-     * update function at Dao level
+     * update staff's information function at Dao level
      * update staff table by username
      * @param staff object staff got from service
      * @return
@@ -51,8 +52,8 @@ public interface AdminMapper {
      */
     @Update("update staff set password = #{password}, " +
             "firstname = #{firstname}, lastname = #{lastname}, " +
-            "telephone = #{telephone}, email = #{email}" +
-            "where username = #{username}")
+            "telephone = #{telephone}, email = #{email}, avatar = #{avatar} " +
+            "where userid = #{userid}")
     int updateByUserName(Staff staff);
 
     /**
@@ -63,18 +64,27 @@ public interface AdminMapper {
      *      if return 0, insert fail
      *      if return > 0, insert success
      */
-    @Insert("insert into staff " +
-            "values(#{username}, #{password}, #{firstname}, #{lastname}, " +
-            "#{email}, #{telephone})")
+    @Insert("insert into staff(password, firstname, lastname, email, telephone, avatar) " +
+            "values( #{password}, #{firstname}, #{lastname}, " +
+            "#{email}, #{telephone}, #{avatar})")
     int addNewStaff(Staff staff);
-
+    
     /**
-     * update user's avatar at Dao level
-     * update user's avatar by username
-     * @param staff
+     * show the amount of fine
+     * only 1 line in the fine table
      * @return
      */
-    @Update("update staff set avatar = #{avatar} where username = #{username}")
-    int updateAvatarByUserName(Staff staff);
+    @Select("select money from fine where id = 1")
+    Fine showFineMoney();
+
+    /**
+     * modify the amount of fine
+     * the default money is 2
+     * only 1 line in the fine table
+     * @param fine object fine got from service
+     * @return
+     */
+    @Update("update fine set money = #{money} where id = 1")
+    int updateFineMoney(Fine fine);
 
 }
