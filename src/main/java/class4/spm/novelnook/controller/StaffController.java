@@ -101,7 +101,7 @@ public class StaffController {
 }
 
     //增加
-    @GetMapping ("/patron/add/{firstname}/{lastname}/{email}/{telephone}")
+    @PostMapping ("/patron/add/{firstname}/{lastname}/{email}/{telephone}")
     public Patron addPatron(@PathVariable("firstname") String firstname, @PathVariable("lastname") String lastname, @PathVariable("email") String email, @PathVariable("telephone") String telephone) {
         int id = staffServiceImpl.addPatron(firstname, lastname, email, telephone);
         return staffServiceImpl.getOnePatron(id);
