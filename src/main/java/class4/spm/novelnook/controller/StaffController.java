@@ -28,6 +28,12 @@ public class StaffController {
         return staffServiceImpl.returnBook(borrowid, returntime);
     }
 
+    //所有patron
+    @GetMapping("/patron/show/all")
+    public List<Patron> getAllPatrons() {
+        return staffServiceImpl.getAllPatrons();
+    }
+
     //log in
     @RequestMapping("/login")
     public String login(@RequestParam("userid") int userid, @RequestParam("password") String password, HttpSession session) {
