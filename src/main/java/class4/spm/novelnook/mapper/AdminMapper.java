@@ -4,7 +4,7 @@ package class4.spm.novelnook.mapper;
 import class4.spm.novelnook.pojo.Staff;
 /*import class4.spm.novelnook.pojo.User;*/
 import class4.spm.novelnook.pojo.admin;
-import class4.spm.novelnook.pojo.fine;
+import class4.spm.novelnook.pojo.Fine;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
