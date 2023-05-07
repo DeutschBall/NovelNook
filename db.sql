@@ -113,6 +113,10 @@ CREATE TABLE IF NOT EXISTS returned(
                                      FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS fine(
+                                 id int PRIMARY KEY AUTO_INCREMEN,
+                                 money numeric(10,2)
+  );
 
 # CREATE TABLE IF NOT EXISTS user(
 #                                    userid VARCHAR(255) PRIMARY KEY,
@@ -175,3 +179,6 @@ INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VAL
 
 INSERT INTO borrow (borrowid, userid, bookid, borrowtime, deadline, status) VALUES
 ('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing');
+
+INSERT INTO fine(money) VALUES
+(2);
