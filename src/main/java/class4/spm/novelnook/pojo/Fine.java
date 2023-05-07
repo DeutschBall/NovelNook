@@ -1,5 +1,4 @@
-package myorg.domain;
-//package class4.spm.novelnook.pojo;
+package class4.spm.novelnook.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
