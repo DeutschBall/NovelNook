@@ -11,6 +11,7 @@ import java.time.Period;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -93,6 +94,53 @@ public class StaffServiceImpl implements StaffService {
     //所有未交罚款信息
     public List<FineInfo> getUnpayInfoAll() {
         return staffMapper.getUnpayInfoAll();
+    }
+
+    //查一个
+    @Override
+    public Patron getOnePatron(int userid){
+        return staffMapper.getOnePatron(userid);
+    }
+
+    //增加
+    @Override
+    public int addPatron(String firstname,String lastname,String email,String telephone) {
+        Patron patron = new Patron();
+        Random random;
+        random = new Random();
+        StringBuilder valSb = new StringBuilder();
+        String charStr = "0123456789abcdefghijklmnopqrstuvwxyz";
+        int charLength = charStr.length();
+        for (int i = 0; i < 8; i++) {
+            int index = random.nextInt(charLength);
+            valSb.append(charStr.charAt(index));
+        }
+        String password;
+        password = valSb.toString();
+
+        random = new Random();
+        String avatar = "avatars/" + random.nextInt(10) +  ".svg";
+
+        patron.setPassword(password);
+        patron.setFirstname(firstname);
+        patron.setLastname(lastname);
+        patron.setEmail(email);
+        patron.setTelephone(telephone);
+        patron.setAvatar(avatar);
+        staffMapper.addPatron(patron);
+        return patron.getUserid();
+    }
+
+    //删除
+    @Override
+    public int deletePatron(int userid){
+        return staffMapper.deletePatron(userid);
+    }
+
+    //修改
+    @Override
+    public int updatePatron(int userid, String password, String firstname, String lastname, String email, String telephone){
+        return  staffMapper.updatePatron(userid, password, firstname, lastname, email, telephone);
     }
 
 }

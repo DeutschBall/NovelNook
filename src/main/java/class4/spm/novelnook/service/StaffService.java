@@ -42,4 +42,17 @@ public interface StaffService {
     //所有未交罚款信息
     List<FineInfo> getUnpayInfoAll();
 
+//patron
+    //获取一个
+    Patron getOnePatron(int userid);
+
+    //增
+    int addPatron(String firstname,String lastname,String email,String telephone);
+
+    //删
+    int deletePatron(int userid);
+
+    //改
+    int updatePatron(int userid, String password, String firstname, String lastname, String email, String telephone);
+
 }

@@ -93,6 +93,32 @@ public class StaffController {
         return staffServiceImpl.getUnpayInfoAll();
     }
 
+//    patron
+//获取一个patron信息
+    @GetMapping("/patron/show/{userid}")
+    public Patron getOnePatron(@PathVariable int userid){
+    return staffServiceImpl.getOnePatron(userid);
+}
+
+    //增加
+    @GetMapping ("/patron/add/{firstname}/{lastname}/{email}/{telephone}")
+    public Patron addPatron(@PathVariable("firstname") String firstname, @PathVariable("lastname") String lastname, @PathVariable("email") String email, @PathVariable("telephone") String telephone) {
+        int id = staffServiceImpl.addPatron(firstname, lastname, email, telephone);
+        return staffServiceImpl.getOnePatron(id);
+    }
+
+    //删除
+    @DeleteMapping("/patron/delete/{userid}")
+    public int deletePatron(@PathVariable int userid){
+        return  staffServiceImpl.deletePatron(userid);
+    }
+
+    //修改
+    @PutMapping("/patron/update/{userid}/{password}/{firstname}/{lastname}/{email}/{telephone}")
+    public int updatePatron(@PathVariable int userid, @PathVariable String password, @PathVariable String firstname, @PathVariable String lastname, @PathVariable String telephone, @PathVariable String email){
+        return staffServiceImpl.updatePatron(userid, password, firstname, lastname, email, telephone);
+    }
+
 
 
 }

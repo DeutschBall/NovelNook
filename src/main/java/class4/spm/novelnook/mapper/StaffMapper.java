@@ -69,4 +69,24 @@ public interface StaffMapper {
             "WHERE borrow.status = 'returned' and returned.ispay = 0")
     List<FineInfo> getUnpayInfoAll();
 
+//patron
+    //获取一个patron信息
+    @Select("select * from patron where userid = #{userid}")
+    Patron getOnePatron(@Param("userid")int userid);
+
+    //增加
+    @Insert("insert into Patron(password, firstname, lastname, email, telephone, avatar)" +
+            "values(#{password}, #{firstname}, #{lastname}, #{email}, #{telephone}, #{avatar})")
+    @Options(useGeneratedKeys = true, keyProperty = "userid",keyColumn = "userid")
+    int addPatron(Patron patron);
+
+    //删除
+    @Delete("delete from patron where userid = #{userid}")
+    int deletePatron(@Param("userid")int userid);
+
+    //更改
+    @Update("update patron set password = #{password}, firstname = #{firstname}, lastname = #{lastname}, email = #{email}, telephone = #{telephone} where userid = #{userid}" )
+    int updatePatron(@Param("userid")int userid, @Param("password")String password, @Param("firstname")String firstname, @Param("lastname")String lastname, @Param("email")String email, @Param("telephone")String telephone);
+
+
 }
