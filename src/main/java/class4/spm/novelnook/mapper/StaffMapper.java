@@ -1,10 +1,7 @@
 package class4.spm.novelnook.mapper;
 
 
-import class4.spm.novelnook.pojo.Book;
-import class4.spm.novelnook.pojo.Borrow;
-import class4.spm.novelnook.pojo.Patron;
-import class4.spm.novelnook.pojo.Returned;
+import class4.spm.novelnook.pojo.*;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +19,11 @@ public interface StaffMapper {
     @Select("select * from patron where userid = #{userid}")
     Patron getPatronById(@Param("userid") int userid);
 
-    //获得罚款金额
+    //登录用，根据输入id找staff
+    @Select("select * from staff where userid = #{userid}")
+    Staff getStaffById(@Param("userid") int userid);
+
+    //获得罚款规则金额
     @Select("select * from ")
     int getFineRule();
 
@@ -40,5 +41,32 @@ public interface StaffMapper {
     @Insert("Insert into returned(borrowid, returntime, fineamount, ispay) values (#{borrowid}, #{returntime}, #{fineamount}, #{ispay})")
     int returnBookAddReturn(Returned returned);
 
+    //书 所有剩余
+    @Select("SELECT SUM(remain) FROM book")
+    int getBookRemain();
+
+    //书 在借
+    @Select("SELECT COUNT(*) FROM borrow WHERE status='borrowing'")
+    int getBookBorrowing();
+
+    //patron 所有
+    @Select("SELECT COUNT(*) FROM patron")
+    int getPatronNum();
+
+    //未交罚款总额
+    @Select("SELECT SUM(returned.fineamount) AS total_fine FROM returned WHERE returned.ispay = 0")
+    int getUnpayAmount();
+
+    //本人信息
+    @Select("select * from staff where userid = #{userid}")
+    Staff getSelf(int userid);
+
+    //所有未交罚款信息
+    @Select("SELECT borrow.borrowid, borrow.userid, book.bookname, borrow.borrowtime, borrow.deadline, returned.returntime, returned.fineamount " +
+            "FROM book " +
+            "JOIN borrow ON book.bookid = borrow.bookid " +
+            "JOIN returned ON borrow.borrowid = returned.borrowid " +
+            "WHERE borrow.status = 'returned' and returned.ispay = 0")
+    List<FineInfo> getUnpayInfoAll();
 
 }

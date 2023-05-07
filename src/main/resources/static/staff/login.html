@@ -54,6 +54,7 @@
             .then(data => {
                 if (data === 'Match success') {
                     // 如果返回的JSON数据是'Match success'，则跳转到dashboard
+                    location.reload();
                     window.location.href = 'http://localhost:8080/staff/dashboard.html';
                 }else {
                     // 否则，显示错误消息
