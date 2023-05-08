@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS returned(
 );
 
 CREATE TABLE IF NOT EXISTS fine(
-                                 id int PRIMARY KEY AUTO_INCREMEN,
+                                 id int PRIMARY KEY AUTO_INCREMENT,
                                  money numeric(10,2)
   );
 
