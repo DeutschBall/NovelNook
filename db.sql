@@ -113,6 +113,10 @@ CREATE TABLE IF NOT EXISTS returned(
                                      FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS fine(
+                                 id int PRIMARY KEY AUTO_INCREMEN,
+                                 money numeric(10,2)
+  );
 
 # CREATE TABLE IF NOT EXISTS user(
 #                                    userid VARCHAR(255) PRIMARY KEY,
@@ -199,3 +203,6 @@ JOIN borrow ON book.bookid = borrow.bookid
 JOIN returned ON borrow.borrowid = returned.borrowid
 WHERE borrow.status = 'returned' and returned.ispay = 0;
 
+
+INSERT INTO fine(money) VALUES
+(2);
