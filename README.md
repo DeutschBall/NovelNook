@@ -27,7 +27,7 @@
       notifyUrl: http://example.natappfree.cc(你的网址)/alipay/notify     #每个人不一样，要修改
     ```
 
-    修改完后，就不用管这个网址了，相关操作还是http://localhost:8080/进行，但是natapp.exe要一直运行
+    修改完后，就不用管这个网址了，相关操作还是在 http://localhost:8080/ 进行，但是natapp.exe要一直运行
 
 	4. http://localhost:8080/alipay/pay?subject=xxxx&traceNo=xxx&totalAmount=xxxx
 
