@@ -3,6 +3,7 @@ package class4.spm.novelnook.controller;
 import class4.spm.novelnook.mapper.AdminMapper;
 import class4.spm.novelnook.pojo.Staff;
 import class4.spm.novelnook.pojo.admin;
+import class4.spm.novelnook.pojo.Fine;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +18,9 @@ import tool.R;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.List;
+import java.io.File;
+import java.util.UUID;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/admin")
@@ -83,6 +87,57 @@ public class AdminController {
 
     }
 
+    /**
+     * Add new staff function
+     * @param staff param got from json data in RequestBody
+     * @return
+     */
+    @PostMapping("/staff")
+    public R addNewStaff(@RequestBody Staff staff) {
+
+        int flag = adminMapper.addNewStaff(staff);
+
+        if (flag > 0) {
+            return R.success(null);
+        }
+
+        return R.error("Add new staff fail.\n" + "This staff maybe exist.");
+    }
+
+    /**
+     * User can upload their own pictures as their avatar
+     * @param file   pictures upload by user
+     * @return
+     */
+    @PostMapping("/uploadAvatar")
+    public R uploadAvatar(MultipartFile file){
+
+        //judge whether file is null
+        if (file.isEmpty()) {
+            return R.error("file not exist or file type error");
+        }
+
+        //rename file
+        String originalFilename = file.getOriginalFilename();
+        //get suffix: .png, .jpg, etc;
+        String suffix = "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        //create a random file name
+        String uuid = UUID.randomUUID().toString().replace("-","");
+
+        //upload file
+        ApplicationHome applicationHome = new ApplicationHome(this.getClass());
+        String pre = applicationHome.getDir().getParentFile().getParentFile().getAbsolutePath()
+                + "\\src\\main\\resources\\static\\avatars\\";
+        String path = pre + uuid + suffix;
+
+        try {
+            file.transferTo(new File(path));
+            return R.success(path);     //send path to frontend
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return R.error("upload avatar fail");
+    }    
 
 
     //只有以管理员身份登录之后才能访问/admin/*的所有url
@@ -139,6 +194,31 @@ public class AdminController {
         else{
             return R.success(avatar);
         }
+    }
+
+    /**
+     * Show the amount of fine
+     * @return
+     */
+    @GetMapping("/fine")
+    public R showFineMoney() {
+        return R.success(adminMapper.showFineMoney());
+    }
+
+    /**
+     * modify the amount of fine
+     * default is 2
+     * @param fine param got from json data in RequestBody
+     * @return
+     */
+    @PutMapping("/updateMoney")
+    public R updateFineMoney(@RequestBody Fine fine) {
+        int flag = adminMapper.updateFineMoney(fine);
+
+        if(flag > 0) {
+            return R.success(null);
+        }
+        return R.error("modify the amount of fine fail");
     }
 
 
