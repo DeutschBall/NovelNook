@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+
 @RestController
 @RequestMapping("/staff")
 @CrossOrigin(origins = "*")
@@ -123,6 +124,41 @@ public class StaffController {
     @PutMapping("/patron/update/{userid}/{password}/{firstname}/{lastname}/{email}/{telephone}")
     public int updatePatron(@PathVariable int userid, @PathVariable String password, @PathVariable String firstname, @PathVariable String lastname, @PathVariable String telephone, @PathVariable String email){
         return staffServiceImpl.updatePatron(userid, password, firstname, lastname, email, telephone);
+    }
+
+
+//book
+    // 获取所有book信息
+    @GetMapping("/book/show/all")
+    public List<Book> getAllBooks() {
+        return staffServiceImpl.getAllBooks();
+    }
+
+    // 根据bookid删除书籍
+    @DeleteMapping("/book/delete/{bookid}")
+    public int DeleteBook(@PathVariable("bookid") int bookid) {
+        return staffServiceImpl.DeleteBook(bookid);
+    }
+
+    // 增加新的书籍
+    @PostMapping("/book/add/{bookname}/{press}/{author}/{publishtime}/{catagory}/{remain}/{introduction}/{location}")
+    public int AddNewBook(@PathVariable("bookname") String bookname, @PathVariable("press") String press,
+                          @PathVariable("author") String author, @PathVariable("publishtime") String publishtime,
+                          @PathVariable("catagory") String catagory, @PathVariable("remain") int remain,
+                          @PathVariable("introduction") String introduction, @PathVariable("location") String location) {
+        return staffServiceImpl.AddNewBook(bookname, press, author, publishtime, catagory, remain, introduction,
+                location);
+    }
+
+    // 更新书籍
+    @PutMapping("/book/update/{bookid}/{bookname}/{press}/{author}/{publishtime}/{catagory}/{remain}/{introduction}/{location}")
+    public int UpdateBook(@PathVariable("bookid") int bookid, @PathVariable("bookname") String bookname,
+                          @PathVariable("press") String press,
+                          @PathVariable("author") String author, @PathVariable("publishtime") String publishtime,
+                          @PathVariable("catagory") String catagory, @PathVariable("remain") int remain,
+                          @PathVariable("introduction") String introduction, @PathVariable("location") String location) {
+        return staffServiceImpl.UpdateBook(bookid, bookname, press, author, publishtime, catagory, remain, introduction,
+                location);
     }
 
 

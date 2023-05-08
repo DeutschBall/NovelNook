@@ -143,4 +143,31 @@ public class StaffServiceImpl implements StaffService {
         return  staffMapper.updatePatron(userid, password, firstname, lastname, email, telephone);
     }
 
+
+//book
+    // 获取所有书信息
+    public List<Book> getAllBooks() {
+        return staffMapper.getAllBooks();
+    }
+
+    // 增加新书
+    @Override
+    public int AddNewBook(String bookname, String press, String author, String publishtime, String catagory, int remain,
+                          String introduction, String location) {
+        return staffMapper.AddNewBook(bookname, press, author, publishtime, catagory, remain, introduction, location);
+    }
+
+    // 删除书
+    @Override
+    public int DeleteBook(int bookid) {
+        return staffMapper.DeleteBook(bookid);
+    }
+
+    // 更新书的信息
+    @Override
+    public int UpdateBook(int bookid, String bookname, String press, String author, String publishtime,
+                          String catagory, int remain, String introduction, String location) {
+        return staffMapper.UpdateBook(bookid, bookname, press, author, publishtime, catagory, remain, introduction,location);
+    }
+
 }

@@ -198,3 +198,4 @@ FROM book
 JOIN borrow ON book.bookid = borrow.bookid
 JOIN returned ON borrow.borrowid = returned.borrowid
 WHERE borrow.status = 'returned' and returned.ispay = 0;
+

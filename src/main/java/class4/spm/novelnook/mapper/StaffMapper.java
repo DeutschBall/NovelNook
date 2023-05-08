@@ -87,6 +87,29 @@ public interface StaffMapper {
     //更改
     @Update("update patron set password = #{password}, firstname = #{firstname}, lastname = #{lastname}, email = #{email}, telephone = #{telephone} where userid = #{userid}" )
     int updatePatron(@Param("userid")int userid, @Param("password")String password, @Param("firstname")String firstname, @Param("lastname")String lastname, @Param("email")String email, @Param("telephone")String telephone);
+    //BOOK
+    // 获取所有book信息
+    @Select("select * from book")
+    List<Book> getAllBooks();
+
+    // 删除书
+    @Delete("DELETE FROM book WHERE bookid = #{bookid};")
+    int DeleteBook(@Param("bookid") int bookid);
+
+    // 增加新书
+    @Insert("INSERT INTO book(bookname, press, author, publishtime, catagory, remain, introduction, location) VALUES (#{bookname}, #{press}, #{author}, #{publishtime}, #{catagory}, #{remain}, #{introduction}, #{location})")
+    int AddNewBook(@Param("bookname") String bookname, @Param("press") String press,
+                   @Param("author") String author, @Param("publishtime") String publishtime,
+                   @Param("catagory") String catagory, @Param("remain") int remain,
+                   @Param("introduction") String introduction, @Param("location") String location);
+
+    // 修改书
+    @Update("update book set bookname = #{bookname}, press = #{press}, author =  #{author}, publishtime = #{publishtime}, catagory =  #{catagory},  remain = #{remain} , introduction = #{introduction}, location = #{location} where bookid = #{bookid}")
+    int UpdateBook(@Param("bookid") int bookid, @Param("bookname") String bookname,
+                   @Param("press") String press,
+                   @Param("author") String author, @Param("publishtime") String publishtime,
+                   @Param("catagory") String catagory, @Param("remain") int remain,
+                   @Param("introduction") String introduction, @Param("location") String location);
 
 
 }

@@ -55,4 +55,20 @@ public interface StaffService {
     //改
     int updatePatron(int userid, String password, String firstname, String lastname, String email, String telephone);
 
+
+//book
+    // 查询所有书
+    List<Book> getAllBooks();
+
+    // 增加书
+    int AddNewBook(String bookname, String press, String author, String publishtime, String catagory, int remain,
+                   String introduction, String location);
+
+    // 删除书
+    int DeleteBook(int bookid);
+
+    // 改书
+    int UpdateBook(int bookid, String bookname, String press, String author, String publishtime, String catagory,
+                   int remain, String introduction, String location);
+
 }
