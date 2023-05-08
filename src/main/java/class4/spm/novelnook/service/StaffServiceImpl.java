@@ -170,4 +170,10 @@ public class StaffServiceImpl implements StaffService {
         return staffMapper.UpdateBook(bookid, bookname, press, author, publishtime, catagory, remain, introduction,location);
     }
 
+    //支付成功后的，return的ispay变成1
+    public int UpdateIspay(String borrowid) {
+        return staffMapper.UpdateIspay(borrowid);
+    }
+
+
 }

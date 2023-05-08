@@ -111,5 +111,9 @@ public interface StaffMapper {
                    @Param("catagory") String catagory, @Param("remain") int remain,
                    @Param("introduction") String introduction, @Param("location") String location);
 
+   //支付成功后的，return的ispay变成1
+   @Update("update returned set ispay = 1 where borrowid = #{borrowid}")
+   int UpdateIspay(@Param("borrowid") String borrowid);
+
 
 }

@@ -4,6 +4,8 @@ import class4.spm.novelnook.pojo.Book;
 import class4.spm.novelnook.pojo.FineInfo;
 import class4.spm.novelnook.pojo.Patron;
 import class4.spm.novelnook.pojo.Staff;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -70,5 +72,8 @@ public interface StaffService {
     // 改书
     int UpdateBook(int bookid, String bookname, String press, String author, String publishtime, String catagory,
                    int remain, String introduction, String location);
+
+    //支付成功后的，return的ispay变成1
+    int UpdateIspay(String borrowid);
 
 }
