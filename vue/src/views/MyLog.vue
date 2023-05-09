@@ -6,18 +6,22 @@
       <tr>
         <th>Borrow ID</th>
         <th>Book ID</th>
+        <th>Book Name</th>
+        <th>Location</th>
         <th>Borrowtime</th>
         <th>Deadline</th>
         <th>Status</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(book, index) in bookList" :key="index" :class="{ 'borrowing': book.status=='borrowing', 'returned': book.status=='returned' }">
+      <tr v-for="(book, index) in bookList" :key="index" :class="{ 'borrowing': book.status==='borrowing', 'returned': book.status==='returned' }">
         <!--界面跳转-->
         <td><router-link :to="'/'+$route.params.userid+'/'+book.bookid+'/bookinfo'" >
           {{book.borrowid}}
         </router-link></td>
         <td>{{ book.bookid }}</td>
+        <td>{{ book.bookname }}</td>
+        <td>{{ book.location }}</td>
         <td>{{ book.borrowtime }}</td>
         <td>{{ book.deadline }}</td>
         <td>{{ book.status}}</td>
@@ -33,7 +37,8 @@ import api from '@/api/api';
 export default {
   data() {
     return {
-      bookList: []
+      bookList: [],
+      dialogVisible: false
     };
   },
   mounted() {

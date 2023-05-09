@@ -1,5 +1,109 @@
 # NovelNook
 
+## Patron组 Release2
+
+### sql修改
+
+```
+#修改reservation表
+#1.reservationid由verchar(255)改为int自增
+#2.status增加枚举值'finished'
+```
+
+### 实体类修改
+
+1. 新增BorrowRecords类代替Borrow类，不再使用Borrow类
+
+BorrowRecords类在Borrow类基础上增加bookname和location属性
+
+```java
+public class BorrowRecords {
+
+    String borrowid;
+    int bookid;
+    String bookname;
+    String location;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date borrowtime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    Date   deadline;
+    String status;
+
+}
+```
+
+2. Reservation类新增 int reservationid作为自增主键、bookname、location，新增含部分属性的构造函数
+
+该修改需要在pom.xml中增加依赖
+
+```xml
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+```
+
+### 页面修改
+
+1. main.js新增Toast组件，需要安装vue-toastification依赖,在/vue/package.json中新增了toast依赖
+
+```json
+"vue-toastification": "^1.7.14"
+```
+
+2. 删除BorrowResult.vue，同时index.js中删除BorrowResult的路由设置
+
+3. App.vue新增View Fine Records按钮
+
+4. Bookinfo.vue新增reserve按钮、borrow方法和reserve方法，点击按钮调用对应方法,
+reserve按钮只有在书remain为0时才会显示
+
+5. HomeView.vue新增dashboard，显示借书数量、逾期数量和罚款金额
+
+
+### 新增功能
+
+1. 新增登录页面,url为根目录：http://localhost:8081/patron
+
+2. 新增FinRecord.vue页面，显示所有罚单记录，未支付的罚单可点击pay按钮跳转到支付页面
+
+**支付相关api只有页面跳转功能，付款以及付款后修改数据库功能未制作**
+
+vue/src/api文件夹下新增alipay.js文件作为支付api文件，同样未被使用，如后续有需求将使用此文件进行开发
+
+
+3. 后端新增以下9个接口，具体实现在PatronController，PatronMapper，
+PatronService和PatronServiceImpl中
+
+```java
+    //登录
+    public String login(int userid, String password);
+
+    //获取借书数量
+    public String  getBorrowCount(int userid);
+
+    //获取逾期图书数量
+    public String getOverdueCount(int userid);
+    
+    //获取罚单列表
+    public List<Returned> getTicketList(int userid);
+
+    //获取罚款金额
+    public String getFineAmount(int userid);
+
+    //预约图书
+    public String reserveBook(int userid , int bookid);
+
+    //获取预约列表
+    public List<Reservation> getReservationList(int userid);
+
+    //更新并检查预约状态
+    public boolean noticeMessage(int userid);
+
+    //取消预约
+    public void cancelReservation(int userid, int bookid);
+```
+
 ## 2023 5.4  sql修改
 
 ```
@@ -86,10 +190,6 @@ Admin组在线文档@[Admin组 (qq.com)](https://docs.qq.com/doc/DZndlc3hrR1Jwd1
 
 ## 关系数据库设计
 
-
-
-
-
 数据库名:`novelnook`
 
 共有四个表,`user,book,borrow,reservation`
@@ -152,4 +252,14 @@ reservation(userid,bookid,reservationtime,status)
 
 ## 前端架构
 
-得找个会前端的来写
+使用**Vue3+Element UI**，notification组件使用的是**Toastification**
+
+`./src`是源码目录
+
+`./api`中存放的是axios获取后端数据的接口
+
+`./assets`是图片等素材目录
+
+`./router`是路由目录
+
+`./views`存放了各类视图组件

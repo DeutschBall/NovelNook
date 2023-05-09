@@ -1,10 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Login from '../views/Login.vue'
+import SearchResult from '../views/SearchResult.vue'
+import Bookinfo from '../views/Bookinfo.vue'
+import MyLog from '../views/MyLog.vue'
+import FineRecord from '../views/FineRecord.vue'
+import ReservationRecord from '../views/ReservationRecord.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '',
+    name: 'login',
+    component: Login
+  },
   {
     path: '/:userid/index',
     name: 'home',
@@ -16,7 +27,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/SearchResult.vue')
+    component: SearchResult
   },
   {
     path: '/:userid/:bookid/bookinfo',
@@ -24,7 +35,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Bookinfo.vue')
+    component: Bookinfo
   },
   {
     path: '/:userid/mylog',
@@ -32,20 +43,24 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/MyLog.vue')
+    component: MyLog
   },
   {
-    path: '/:userid/:bookid/borrowresult',
-    name: 'borrowresult',
+    path: '/:userid/finerecord',
+    name: 'finerecord',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/BorrowResult')
+    component: FineRecord
   },
   {
-    path: 'goHome',
-    redirect: '/:userid/index'
-  }
+    path: '/:userid/reservation',
+    name: 'reservation',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: ReservationRecord
+  },
 ]
 
 const router = new VueRouter(

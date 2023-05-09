@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS superuser;
 #5.4更改  新增returned表
 #5.5 borrow表 resvation表用的userid bookid还是varchar，改成int
 
-insert into staff values (123,'123','1','2','3','qewqe','asdad');
+
 CREATE  TABLE IF NOT EXISTS staff(
   userid int PRIMARY KEY AUTO_INCREMENT,
   password varchar(255),
@@ -95,11 +95,11 @@ CREATE TABLE IF NOT EXISTS borrow(
 );
 
 CREATE TABLE IF NOT EXISTS reservation(
-                                          reservationid VARCHAR(255),
+                                          reservationid int AUTO_INCREMENT,
                                           userid int,
                                           bookid int,
                                           reservationtime DATE,
-                                          status ENUM('canceled','waiting','satisfied'),
+                                          status ENUM('canceled','waiting','satisfied','finished'),
                                           FOREIGN KEY(userid) REFERENCES patron(userid) ON UPDATE CASCADE ON DELETE CASCADE ,
                                           FOREIGN KEY(bookid) REFERENCES book(bookid) ON UPDATE CASCADE ON DELETE CASCADE ,
                                           PRIMARY KEY (reservationid)
@@ -113,10 +113,6 @@ CREATE TABLE IF NOT EXISTS returned(
                                      FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS fine(
-                                 id int PRIMARY KEY AUTO_INCREMEN,
-                                 money numeric(10,2)
-  );
 
 # CREATE TABLE IF NOT EXISTS user(
 #                                    userid VARCHAR(255) PRIMARY KEY,
@@ -179,6 +175,3 @@ INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VAL
 
 INSERT INTO borrow (borrowid, userid, bookid, borrowtime, deadline, status) VALUES
 ('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing');
-
-INSERT INTO fine(money) VALUES
-(2);
