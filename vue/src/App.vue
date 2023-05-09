@@ -61,6 +61,7 @@ export default {
         path:"/"+userid+"/"+to
       })
     },
+	//when you click log out, this method will be active
     handleCommand() {
         this.$toast.info("Please log in again.",{
             position: "top-center",
@@ -76,6 +77,8 @@ export default {
             icon: true,
             rtl: false
         });
+        
+        //add log out action here
     },
   }
 }
