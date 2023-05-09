@@ -4,7 +4,7 @@
 
  1. 确保有Alipay、Alipayconfig、Alipaycontroller三个文件，并在之后修改application.yaml
 
- 2. https://natapp.cn/article/natapp_newbie按这个流程来
+ 2. https://natapp.cn/article/natapp_newbie  按这个流程来
 
     其中   端口为 8080
 
@@ -29,7 +29,7 @@
 
     修改完后，就不用管这个网址了，相关操作还是在 http://localhost:8080/ 进行，但是natapp.exe要一直运行
 
-	4. http://localhost:8080/alipay/pay?subject=xxxx&traceNo=xxx&totalAmount=xxxx
+    4. http://localhost:8080/alipay/pay?subject=xxxx&traceNo=xxx&totalAmount=xxxx
 
     通过这个URL跳转到付款，三个参数分别是   订单名;  订单编号;  总金额
 
@@ -39,11 +39,11 @@
 
     因此patron组生成borrowid的时候得带点随机性
 
-	5. 跳转到付款界面，可以用账密登录付款（账号：lvslof1406@sandbox.com      密码： 111111）  虚拟金额随便用
+    5. 跳转到付款界面，可以用账密登录付款（账号：lvslof1406@sandbox.com      密码： 111111）  虚拟金额随便用
 
     也可以用app”支付宝客户端沙箱版“ 扫码（仅安卓有）
 
-	6. 付款成功，会自动访问一次notifyUrl，并且在returned表中对应这一记录的ispay置为1，前端刷新一次页面重新拿returned表的数据就可以。
+    6. 付款成功，会自动访问一次notifyUrl，并且在returned表中对应这一记录的ispay置为1，前端刷新一次页面重新拿returned表的数据就可以。
 
     
 

@@ -119,7 +119,7 @@ public class StaffServiceImpl implements StaffService {
         password = valSb.toString();
 
         random = new Random();
-        String avatar = "avatars/" + random.nextInt(10) +  ".svg";
+        String avatar = "avatars/" + (random.nextInt(9) + 1) +  ".svg";
 
         patron.setPassword(password);
         patron.setFirstname(firstname);
