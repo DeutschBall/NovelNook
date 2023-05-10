@@ -7,11 +7,9 @@
             <span style="font-family: Arial;">{{this.userid===NULL ? 'Please login':'User Id: '+this.userid}}<i v-if="userid!==NULL" class="el-icon-arrow-down el-icon--right"></i></span>
         </span>
         <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-if="userid!==NULL" command>Logout</el-dropdown-item>
+          <el-dropdown-item v-if="userid!==NULL" command>Logout</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <!-- <span v-if="userid===null" style="margin-left: auto; font-family: Arial;">Please login {{ userid }}</span>
-      <span v-else style="margin-left: auto; font-family: Arial;">User ID: {{ userid }}</span> -->
       <button class="view-records-btn" @click="jump(userid,'mylog')">View Borrowing Records</button>
       <button class="view-records-btn" @click="jump(userid,'reservation')">View Reservation Records</button>
       <button class="view-records-btn" @click="jump(userid,'finerecord')">View Fine Records</button>
@@ -44,7 +42,7 @@
 export default {
   data(){
     return {
-      userid: NULL
+      userid: null
     }
   },
   mounted() {
@@ -52,34 +50,46 @@ export default {
       console.log(value);
       this.userid = value
     });
+    this.$bus.$on('logout', value=>{
+      console.log(value);
+      this.userid = value
+    });
     this.userid = this.$route.params.userid
   },
+  beforeCreate() {
+    this.$bus.$off('userid');
+    this.$bus.$off('logout');
+  },
 
-  methods:{
-    jump(userid,to){
+  methods: {
+    jump(userid, to) {
       this.$router.push({
-        path:"/"+userid+"/"+to
+        path: "/" + userid + "/" + to
       })
     },
-	//when you click log out, this method will be active
+    //when you click log out, this method will be active
     handleCommand() {
-        this.$toast.info("Please log in again.",{
-            position: "top-center",
-            timeout: 1200,
-            closeOnClick: true,
-            pauseOnFocusLoss: false,
-            pauseOnHover: false,
-            draggable: false,
-            draggablePercent: 0.6,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: "button",
-            icon: true,
-            rtl: false
-        });
-        
-        //add log out action here
+      this.$toast.info("Please log in again.", {
+        position: "top-center",
+        timeout: 1200,
+        closeOnClick: true,
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        draggable: false,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false
+      });
+      this.logout()
     },
+    logout() {
+      this.$bus.$emit('logout')
+      this.$router.push({path:'/'})
+    }
   }
+
 }
 </script>
