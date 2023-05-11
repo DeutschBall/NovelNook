@@ -19,7 +19,10 @@ const routes = [
   {
     path: '/:userid/index',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+        requireAuthorization: true,
+    },
   },
   {
     path: '/:userid/search',
@@ -27,7 +30,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: SearchResult
+    component: SearchResult,
+    meta: {
+        requireAuthorization: true,
+    },
   },
   {
     path: '/:userid/:bookid/bookinfo',
@@ -35,7 +41,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: Bookinfo
+    component: Bookinfo,
+    meta: {
+        requireAuthorization: true,
+    },
   },
   {
     path: '/:userid/mylog',
@@ -43,7 +52,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: MyLog
+    component: MyLog,
+    meta: {
+        requireAuthorization: true,
+    },
   },
   {
     path: '/:userid/finerecord',
@@ -51,7 +63,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: FineRecord
+    component: FineRecord,
+    meta: {
+        requireAuthorization: true,
+    },
   },
   {
     path: '/:userid/reservation',
@@ -59,7 +74,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: ReservationRecord
+    component: ReservationRecord,
+    meta: {
+        requireAuthorization: true,
+    },
   },
 ]
 
@@ -70,5 +88,22 @@ const router = new VueRouter(
   base: 'patron',
   routes
 })
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requireAuthorization) { 
+        if (sessionStorage.getItem("loginID")==to.params.userid) {  
+            next();
+        }
+		else {
+            next({
+                path: '/',
+            })
+            alert("Access Denied!");
+        }
+    }
+    else {
+        next();
+    }
+});
 
 export default router

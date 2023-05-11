@@ -2,7 +2,7 @@
   <div class="loginbBody">
     <div class="loginDiv">
       <div class="login-content">
-        <h1 class="login-title">Log In</h1>
+        <h1 class="login-title">Login</h1>
         <el-form :model="loginForm" label-width="100px"
                  :rules="rules" ref="loginForm">
           <el-form-item label="UserID" prop="name">
@@ -49,10 +49,16 @@ export default {
       api.book.login(this.loginForm.name, this.loginForm.password).then(res => {
         console.log(res.data);
         if(res.data === "Password is wrong") {
-          this.$toast.error(res.data);
+          this.$toast.error(res.data,{
+            position: 'top-center',
+            timeout: 800,
+            hideProgressBar: true,
+            closeButton: false,
+          });
         }
         else {
           this.userid = res.data
+          sessionStorage.setItem("loginID",this.loginForm.name);
           this.$bus.$emit('userid', res.data)
           this.jump(res.data);
         }
