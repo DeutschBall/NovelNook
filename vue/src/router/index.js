@@ -81,10 +81,8 @@ const routes = [
   },
 ]
 
-const router = new VueRouter(
-
-    {
-  mode: 'history',
+const router = new VueRouter({
+  //mode: 'history',
   base: 'patron',
   routes
 })
