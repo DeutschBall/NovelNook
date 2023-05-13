@@ -24,8 +24,8 @@ public interface StaffMapper {
     Staff getStaffById(@Param("userid") int userid);
 
     //获得罚款规则金额
-    @Select("select * from fine")
-    int getFineRule();
+    @Select("select money from fine ORDER BY id DESC LIMIT 1;")
+    double getFineRule();
 
     //还书
     //1. 查借阅记录

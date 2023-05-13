@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS reservation(
 CREATE TABLE IF NOT EXISTS returned(
                                      borrowid VARCHAR(255) PRIMARY KEY ,
                                      returntime DATE, #还书的实际时间，还书的ddl在borrow表中
-                                     fineamount int, #罚款金额
+                                     fineamount numeric(10,2), #罚款金额
                                      ispay boolean, #是否交过罚款
                                      FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -187,8 +187,8 @@ INSERT INTO borrow (borrowid, userid, bookid, borrowtime, deadline, status) VALU
 ('brid005', '3', '5', '2023-05-05', '2023-06-05', 'returned');
 
 INSERT INTO returned (borrowid, returntime, fineamount, ispay) VALUES
-('brid003', '2023-06-08', 3, 0),
-('brid005', '2020-06-09', 4, 0);
+('brid003', '2023-06-08', 3.5, 0),
+('brid005', '2020-06-09', 4.4, 0);
 
 
 SELECT COUNT(*) FROM borrow WHERE status='borrowing';

@@ -19,8 +19,6 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     StaffMapper staffMapper;
 
-    //过了ddl，每一天罚 1 镑（由admin组定）
-    int finePerDay = 1;
 
     // 获取所有patron信息
     public List<Patron> getAllPatrons() {
@@ -41,12 +39,22 @@ public class StaffServiceImpl implements StaffService {
 
         Borrow borrowRecord = staffMapper.getBorrowRecord(borrowid);
 
-        //已归还
-        if(Objects.equals(borrowRecord.getStatus(), "returned")) {
-            return 0;
+        //不存在的borrowid
+        if(borrowRecord == null) {
+            return -1;
         }
 
-        //Returned对象
+        //已归还
+        if(Objects.equals(borrowRecord.getStatus(), "returned")) {
+            return -2;
+        }
+
+        //还书日期小于借书日期
+        if(returntime.getTime() < borrowRecord.getBorrowtime().getTime()) {
+            return -3;
+        }
+
+        //构建 Returned对象
         Returned returned = new Returned();
         returned.setBorrowid(borrowid);
         returned.setReturntime(returntime);
@@ -55,7 +63,7 @@ public class StaffServiceImpl implements StaffService {
             returned.setFineamount(0);
             returned.setIspay(true);
         } else {
-            returned.setFineamount((int)outDay * finePerDay);
+            returned.setFineamount((int)outDay * staffMapper.getFineRule());
             returned.setIspay(false);
         }
 
