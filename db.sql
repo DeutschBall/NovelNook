@@ -108,13 +108,13 @@ CREATE TABLE IF NOT EXISTS reservation(
 CREATE TABLE IF NOT EXISTS returned(
                                      borrowid VARCHAR(255) PRIMARY KEY ,
                                      returntime DATE, #还书的实际时间，还书的ddl在borrow表中
-                                     fineamount int, #罚款金额
+                                     fineamount numeric(10,2), #罚款金额
                                      ispay boolean, #是否交过罚款
                                      FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS fine(
-                                 id int PRIMARY KEY AUTO_INCREMEN,
+                                 id int PRIMARY KEY AUTO_INCREMENT,
                                  money numeric(10,2)
   );
 
@@ -176,9 +176,33 @@ INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VAL
 ('iloveme', 'Olivia', 'Hernandez', 'oliviahernandez@example.com', '+1-012-345-6789', 'avatars/9.svg'),
 ('1234567890', 'Matthew', 'Allen', 'matthewallen@example.com', '+1-123-456-7890', 'avatars/5.svg');
 
+INSERT INTO staff (password, firstname, lastname, email, telephone, avatar) VALUES
+('123456', 'aaa', 'bbb', '123@ex.com', '74184561', 'avatars/5.svg');
 
 INSERT INTO borrow (borrowid, userid, bookid, borrowtime, deadline, status) VALUES
-('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing');
+('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing'),
+('brid002', '1', '2', '2023-05-05', '2023-06-05', 'borrowing'),
+('brid003', '1', '3', '2023-05-05', '2023-06-05', 'returned'),
+('brid004', '2', '4', '2023-05-05', '2023-06-05', 'borrowing'),
+('brid005', '3', '5', '2023-05-05', '2023-06-05', 'returned');
+
+INSERT INTO returned (borrowid, returntime, fineamount, ispay) VALUES
+('brid003', '2023-06-08', 3.5, 0),
+('brid005', '2020-06-09', 4.4, 0);
+
+
+SELECT COUNT(*) FROM borrow WHERE status='borrowing';
+
+SELECT SUM(returned.fineamount) AS total_fine
+FROM returned
+WHERE returned.ispay = 0;
+
+SELECT borrow.borrowid, borrow.userid, book.bookname, borrow.borrowtime, borrow.deadline, returned.returntime, returned.fineamount
+FROM book
+JOIN borrow ON book.bookid = borrow.bookid
+JOIN returned ON borrow.borrowid = returned.borrowid
+WHERE borrow.status = 'returned' and returned.ispay = 0;
+
 
 INSERT INTO fine(money) VALUES
 (2);
