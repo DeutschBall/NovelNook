@@ -1,5 +1,11 @@
 # NovelNook
 
+## 2023 5.16
+
+加入homepage页面，在src/homepage中
+各组可测试跳转有无问题
+
+加入super user，主页src/static/super_user/index.html,添加删除搜索admin功能
 ## 2023 5.4  sql修改
 
 ```
