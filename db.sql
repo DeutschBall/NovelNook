@@ -12,21 +12,9 @@ DROP TABLE IF EXISTS patron;
 DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS superuser;
 
-#关于用户，老师要求是id、password自动生成后再给用户展示， 所以：user表全拆开，userid都是自增
-#登录就用user id + passowrd，选择哪个身份就查哪个表
 
-#第一次release后变动5.3版
 
-#删除user表   		新建 admin表、superuser表
-#	patron表 	    userid自增   删掉username
-#	staff表 		 username改成userid，自增
-#book表              bookid自增 添加location字段;   添加book测试数据
-#brorrw表、reservation表       参照的都是patron的userid
 
-#5.4更改  新增returned表
-#5.5 borrow表 resvation表用的userid bookid还是varchar，改成int
-
-insert into staff values (123,'123','1','2','3','qewqe','asdad');
 CREATE  TABLE IF NOT EXISTS staff(
   userid int PRIMARY KEY AUTO_INCREMENT,
   password varchar(255),
@@ -36,6 +24,7 @@ CREATE  TABLE IF NOT EXISTS staff(
   telephone varchar(255),
   avatar varchar(255)
 );
+insert into staff values (123,'123','1','2','3','qewqe','asdad');
 
 
 CREATE  TABLE IF NOT EXISTS patron(
@@ -59,7 +48,8 @@ CREATE  TABLE IF NOT EXISTS superuser(
     avatar varchar(255)
 );
 
-#insert into admin values (123,'123','1','2','3','qewqe','asdad');
+insert into superuser values (123,'123','1','2','3','qewqe','asdad');
+
 CREATE  TABLE IF NOT EXISTS admin(
     userid int PRIMARY KEY AUTO_INCREMENT,
     password VARCHAR(255),
@@ -69,6 +59,7 @@ CREATE  TABLE IF NOT EXISTS admin(
     telephone varchar(255),
     avatar varchar(255)
 );
+insert into admin values (123,'123','1','2','3','qewqe','asdad');
 
 
 CREATE TABLE IF NOT EXISTS book(
@@ -113,10 +104,6 @@ CREATE TABLE IF NOT EXISTS returned(
                                      FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS fine(
-                                 id int PRIMARY KEY AUTO_INCREMEN,
-                                 money numeric(10,2)
-  );
 
 # CREATE TABLE IF NOT EXISTS user(
 #                                    userid VARCHAR(255) PRIMARY KEY,
@@ -180,5 +167,3 @@ INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VAL
 INSERT INTO borrow (borrowid, userid, bookid, borrowtime, deadline, status) VALUES
 ('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing');
 
-INSERT INTO fine(money) VALUES
-(2);
