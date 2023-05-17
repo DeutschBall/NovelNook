@@ -55,7 +55,7 @@ public interface StaffMapper {
 
     //未交罚款总额
     @Select("SELECT SUM(returned.fineamount) AS total_fine FROM returned WHERE returned.ispay = 0")
-    int getUnpayAmount();
+    double getUnpayAmount();
 
     //本人信息
     @Select("select * from staff where userid = #{userid}")

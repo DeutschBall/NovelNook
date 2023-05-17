@@ -36,7 +36,7 @@ public interface StaffService {
     int getPatronNum();
 
     //未交罚款总额
-    int getUnpayAmount();
+    double getUnpayAmount();
 
     //本人信息
     Staff getSelf(int userid);

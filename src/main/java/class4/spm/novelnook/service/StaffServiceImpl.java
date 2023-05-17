@@ -90,7 +90,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     //未交罚款总额
-    public int getUnpayAmount() {
+    public double getUnpayAmount() {
         return staffMapper.getUnpayAmount();
     }
 
