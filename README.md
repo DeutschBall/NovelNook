@@ -1,6 +1,14 @@
 # NovelNook
 
 
+
+## 2023 5.16
+
+加入homepage页面，在src/homepage中
+各组可测试跳转有无问题
+
+加入super user，主页src/static/super_user/index.html,添加删除搜索admin功能
+
 ## 2023.5.17 数据库及对应后端语句修改
 AdminMapper.java:
 getStaffByUserName(int userid)   deleteStaffByUserName(int userid)   String getPasswordByUsername(int userid)全部依照新版数据库，将参数改为userid
@@ -25,7 +33,7 @@ LoginHandlerinterceptor.java/MyWebMvcConfig.java:
 
     其中   端口为 8080
 
-    ​			config.ini文件只需要写两行：
+    			config.ini文件只需要写两行：
 
     ```
     [default]
@@ -64,7 +72,6 @@ LoginHandlerinterceptor.java/MyWebMvcConfig.java:
 
     
 
-    
 
 ## 2023 5.4  sql修改
 
