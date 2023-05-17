@@ -1,5 +1,12 @@
 # NovelNook
 
+
+## 2023 5.16
+
+加入homepage页面，在src/homepage中
+各组可测试跳转有无问题
+
+加入super user，主页src/static/super_user/index.html,添加删除搜索admin功能
 ## 2023 5.8 alipay api
 
  1. 确保有Alipay、Alipayconfig、Alipaycontroller三个文件，并在之后修改application.yaml
@@ -8,7 +15,7 @@
 
     其中   端口为 8080
 
-    ​			config.ini文件只需要写两行：
+    			config.ini文件只需要写两行：
 
     ```
     [default]
@@ -46,8 +53,6 @@
     6. 付款成功，会自动访问一次notifyUrl，并且在returned表中对应这一记录的ispay置为1，前端刷新一次页面重新拿returned表的数据就可以。
 
     
-
-
 
 ## 2023 5.4  sql修改
 
