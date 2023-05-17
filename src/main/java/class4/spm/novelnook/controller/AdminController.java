@@ -37,6 +37,7 @@ public class AdminController {
     @GetMapping("/staff")
     public R<List<Staff>> getStaff(){//展示列表界面
         List<Staff> list = adminMapper.ShowStaff();
+        System.out.println(list);
         return R.success(list);
 
     }
@@ -151,7 +152,7 @@ public class AdminController {
             // 登录成功，设置cookie等
             response.addCookie(new Cookie("userid", String.valueOf(userid)));
             session.setAttribute("userid",userid);
-            response.sendRedirect("/admin/index.html");
+//            response.sendRedirect("/admin/index.html");
 //            response.sendRedirect("/admin/logout");//测试时用此跳转测试logout
             return R.success(Ad);
         } else {
