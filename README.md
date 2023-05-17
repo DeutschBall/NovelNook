@@ -1,108 +1,77 @@
 # NovelNook
 
-## Patron组 Release2
-
-### sql修改
-
-```
-#修改reservation表
-#1.reservationid由verchar(255)改为int自增
-#2.status增加枚举值'finished'
-```
-
-### 实体类修改
-
-1. 新增BorrowRecords类代替Borrow类，不再使用Borrow类
-
-BorrowRecords类在Borrow类基础上增加bookname和location属性
-
-```java
-public class BorrowRecords {
-
-    String borrowid;
-    int bookid;
-    String bookname;
-    String location;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    Date borrowtime;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    Date   deadline;
-    String status;
-
-}
-```
-
-2. Reservation类新增 int reservationid作为自增主键、bookname、location，新增含部分属性的构造函数
-
-该修改需要在pom.xml中增加依赖
-
-```xml
-<dependency>
-   <groupId>org.springframework.boot</groupId>
-   <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
-```
-
-### 页面修改
-
-1. main.js新增Toast组件，需要安装vue-toastification依赖,在/vue/package.json中新增了toast依赖
-
-```json
-"vue-toastification": "^1.7.14"
-```
-
-2. 删除BorrowResult.vue，同时index.js中删除BorrowResult的路由设置
-
-3. App.vue新增View Fine Records按钮
-
-4. Bookinfo.vue新增reserve按钮、borrow方法和reserve方法，点击按钮调用对应方法,
-reserve按钮只有在书remain为0时才会显示
-
-5. HomeView.vue新增dashboard，显示借书数量、逾期数量和罚款金额
 
 
-### 新增功能
+## 2023 5.16
 
-1. 新增登录页面,url为根目录：http://localhost:8081/patron
+加入homepage页面，在src/homepage中
+各组可测试跳转有无问题
 
-2. 新增FinRecord.vue页面，显示所有罚单记录，未支付的罚单可点击pay按钮跳转到支付页面
+加入super user，主页src/static/super_user/index.html,添加删除搜索admin功能
 
-**支付相关api只有页面跳转功能，付款以及付款后修改数据库功能未制作**
+## 2023.5.17 数据库及对应后端语句修改
+AdminMapper.java:
+getStaffByUserName(int userid)   deleteStaffByUserName(int userid)   String getPasswordByUsername(int userid)全部依照新版数据库，将参数改为userid
 
-vue/src/api文件夹下新增alipay.js文件作为支付api文件，同样未被使用，如后续有需求将使用此文件进行开发
+AdminController.java:
+login,logout基本无改动，因为与集成版index.html存在冲突，验收时记得将相关部分选择ww的版本（注释掉）
+
+login.html:
+测试登录注销功能时写的简陋页面，正式验收时以ww版本为准
+
+LoginHandlerinterceptor.java/MyWebMvcConfig.java:
+拦截器部分，若要屏蔽拦截器功能只需注释掉LoginHandlerinterceptor.java中的if()...return false;部分即可（即永远返回TRUE即可）
+若不屏蔽拦截器功能，只拦截特定url，则需在MyWebMvcConfig.java中   excludePathPatterns()中加上登录界面所需的静态资源的url即可
+以ww版本为准
 
 
-3. 后端新增以下9个接口，具体实现在PatronController，PatronMapper，
-PatronService和PatronServiceImpl中
+## 2023 5.8 alipay api
 
-```java
-    //登录
-    public String login(int userid, String password);
+ 1. 确保有Alipay、Alipayconfig、Alipaycontroller三个文件，并在之后修改application.yaml
 
-    //获取借书数量
-    public String  getBorrowCount(int userid);
+ 2. https://natapp.cn/article/natapp_newbie  按这个流程来
 
-    //获取逾期图书数量
-    public String getOverdueCount(int userid);
+    其中   端口为 8080
+
+    			config.ini文件只需要写两行：
+
+    ```
+    [default]
+    authtoken=你的token
+    ```
+
+    运行natapp.exe（不要停），拿到一个网址http://example.natappfree.cc
+
+ 3. 在resources/application.yaml中，修改alipayconfig.notifyUrl
+
+    ```yaml
+    alipayconfig:
+      appId: 2021000122683765
+      appPrivateKey: xxxxxxxxx不用改
+      alipayPublicKey: xxxxxxx不用改
+      notifyUrl: http://example.natappfree.cc(你的网址)/alipay/notify     #每个人不一样，要修改
+    ```
+
+    修改完后，就不用管这个网址了，相关操作还是在 http://localhost:8080/ 进行，但是natapp.exe要一直运行
+
+    4. http://localhost:8080/alipay/pay?subject=xxxx&traceNo=xxx&totalAmount=xxxx
+
+    通过这个URL跳转到付款，三个参数分别是   订单名;  订单编号;  总金额
+
+    对应returned表，应该是    订单名(随意，建议bookname);   borrowid;   fineamount
+
+    **注意**：订单编号（borrowid）好像不能重复用，每次测试得在returned表里新添一条。猜测一个商家账户的订单编号唯一，
+
+    因此patron组生成borrowid的时候得带点随机性
+
+    5. 跳转到付款界面，可以用账密登录付款（账号：lvslof1406@sandbox.com      密码： 111111）  虚拟金额随便用
+
+    也可以用app”支付宝客户端沙箱版“ 扫码（仅安卓有）
+
+    6. 付款成功，会自动访问一次notifyUrl，并且在returned表中对应这一记录的ispay置为1，前端刷新一次页面重新拿returned表的数据就可以。
+
     
-    //获取罚单列表
-    public List<Returned> getTicketList(int userid);
 
-    //获取罚款金额
-    public String getFineAmount(int userid);
-
-    //预约图书
-    public String reserveBook(int userid , int bookid);
-
-    //获取预约列表
-    public List<Reservation> getReservationList(int userid);
-
-    //更新并检查预约状态
-    public boolean noticeMessage(int userid);
-
-    //取消预约
-    public void cancelReservation(int userid, int bookid);
-```
 
 ## 2023 5.4  sql修改
 
@@ -189,6 +158,10 @@ Admin组在线文档@[Admin组 (qq.com)](https://docs.qq.com/doc/DZndlc3hrR1Jwd1
 
 
 ## 关系数据库设计
+
+
+
+
 
 数据库名:`novelnook`
 
