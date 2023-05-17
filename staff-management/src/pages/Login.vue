@@ -5,8 +5,8 @@
                 <form>
                     <h2 class="title">Create Account</h2>
                     <!-- <span class="text">or use email for registration</span> -->
-                    <input class="form__input" type="text" placeholder="Username" @click="initWarn(0)"/>
-                    <span style="text-align:left;width: 320px;color: red;" v-show=checkOk.username>Please input your username</span>
+                    <input class="form__input" type="text" placeholder="UserID" @click="initWarn(0)"/>
+                    <span style="text-align:left;width: 320px;color: red;" v-show=checkOk.userid>Please input your userid</span>
                     <!-- <input class="form__input" type="text" placeholder="Email" /> -->
                     <input class="form__input" type="password" placeholder="Password" @click="initWarn(1)"/>
                     <span style="text-align:left;width: 320px;color: red;" v-show=checkOk.password >Password must be longer than six characters!</span>
@@ -17,8 +17,8 @@
                 <form>
                     <h2 class="title">Sign in to Website</h2>
                     <!-- <span class="text">or use email for registration</span> -->
-                    <input class="form__input" type="text" v-model="loginForm.username" placeholder="Username" @click="initWarn(0)"/>
-                    <span style="text-align:left;width: 320px;color: red;" v-show=checkOk.username>Please input your username</span>
+                    <input class="form__input" type="text" v-model="loginForm.userid" placeholder="UserID" @click="initWarn(0)"/>
+                    <span style="text-align:left;width: 320px;color: red;" v-show=checkOk.userid>Please input your userid</span>
                     <input class="form__input" type="password" v-model="loginForm.password" placeholder="Password" @click="initWarn(1)"/>
                     <span style="text-align:left;width: 320px;color: red;" v-show=checkOk.password>Password must be longer than six characters!</span>
                     <div class="primary-btn" @click="handleLogin">Log In</div>
@@ -69,13 +69,13 @@ export default {
         return {
             isLogin: false,
             loginForm: {
-                username: '',
+                userid: '',
                 password: ''
             },
             // 验证
             checkOk:{
                 password:false,
-                username:false,
+                userid:false,
             },
             // // 登录规则
             // loginRules: {
@@ -112,7 +112,7 @@ export default {
                 this.checkOk.password = false;
             }
             else{
-                this.checkOk.username = false;
+                this.checkOk.userid = false;
             }
         },
         // 登录业务
@@ -121,7 +121,7 @@ export default {
                 if (this.validJudge()) {
                     this.loading = true
                     let param = new URLSearchParams()
-                    param.append("username", this.loginForm.username)
+                    param.append("userid", this.loginForm.userid)
                     param.append("password", this.loginForm.password)
                     axios({
                         method: "post",
@@ -146,13 +146,13 @@ export default {
         },
 
         validJudge(){
-            var username = this.loginForm.username;
+            var userid= this.loginForm.userid;
             var password = this.loginForm.password;
-            if(!username){
-                this.checkOk.username=true;
+            if(!userid){
+                this.checkOk.userid=true;
                 return false;
             }
-            if(!password || password.length < 6){
+            if(!password){
                 this.checkOk.password=true;
                 return false;
             }
@@ -184,7 +184,7 @@ export default {
     min-height: 600px;
     height: 600px;
     padding: 25px;
-    top: 300px;
+    top: 25%;
     background-color: #ecf0f3;
     box-shadow: 2px 2px 2px #d1d9e6, -2px -2px 2px #f9f9f9;
     border-radius: 18px;
