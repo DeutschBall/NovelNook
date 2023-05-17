@@ -41,11 +41,11 @@ public class AdminController {
 
     }
 
-    @GetMapping("/staff/{username}")
+    @GetMapping("/staff/{userid}")
 //    @PathVariable是用来接收请求路径中的参数值
-    public R<List<Staff>>  getStaffByUsername(@PathVariable("username") String username){//列表界面查找
-        System.out.println(username);
-        List<Staff> list=adminMapper.getStaffByUserName(username);
+    public R<List<Staff>>  getStaffByUsername(@PathVariable("userid") int userid){//列表界面查找
+        System.out.println(userid);
+        List<Staff> list=adminMapper.getStaffByUserName(userid);
 //        R<Staff> r = (R<Staff>) list;
         if (list.isEmpty()) {
             return R.error("No such person");
@@ -55,16 +55,16 @@ public class AdminController {
 //        return r.success(list);
     }
 
-    @DeleteMapping("/staff/{username}")
-    public R<List<Staff>> deleteStaffByUsername(@PathVariable("username") String username){//列表界面删除
-        System.out.println(username);
-        List<Staff> l  = adminMapper.getStaffByUserName(username);
+    @DeleteMapping("/staff/{userid}")
+    public R<List<Staff>> deleteStaffByUsername(@PathVariable("userid") int userid){//列表界面删除
+        System.out.println(userid);
+        List<Staff> l  = adminMapper.getStaffByUserName(userid);
 //        System.out.println(list);
         if (l == null) {
             return R.error("Delete fail");
         }
         else {
-            adminMapper.deleteStaffByUserName(username);
+            adminMapper.deleteStaffByUserName(userid);
             return R.success();
         }
     }
