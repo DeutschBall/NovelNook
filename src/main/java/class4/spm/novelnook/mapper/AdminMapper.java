@@ -15,17 +15,17 @@ public interface AdminMapper {
 /*    @Select("select * from user where userrole = 'patron'")
     List<User> getAllPatrons();*/
 
-    @Select("select * from staff where username like '%${username}%'")
-    List<Staff> getStaffByUserName(String username);//用来查找
+    @Select("select * from staff where userid like '%${userid}%'")
+    List<Staff> getStaffByUserName(int userid);//用来查找
 
     @Select("select * from staff ")//用来显示界面
     List<Staff> ShowStaff();
 
-    @Delete("delete from staff where username = #{username}")
-    void deleteStaffByUserName(String username);//用来删除
+    @Delete("delete from staff where userid = #{userid}")
+    void deleteStaffByUserName(int userid);//用来删除
 
-    @Select("select password from staff where username = #{username}")
-    String getPasswordByUsername(String username);//用姓名查找密码
+    @Select("select password from staff where userid = #{userid}")
+    String getPasswordByUsername(int userid);//用姓名查找密码
 
 
     //admin方法：

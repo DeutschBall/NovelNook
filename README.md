@@ -1,5 +1,20 @@
 # NovelNook
 
+## 2023.5.17 数据库及对应后端语句修改
+AdminMapper.java:
+getStaffByUserName(int userid)   deleteStaffByUserName(int userid)   String getPasswordByUsername(int userid)全部依照新版数据库，将参数改为userid
+
+AdminController.java:
+login,logout基本无改动，因为与集成版index.html存在冲突，验收时记得将相关部分选择ww的版本（注释掉）
+
+login.html:
+测试登录注销功能时写的简陋页面，正式验收时以ww版本为准
+
+LoginHandlerinterceptor.java/MyWebMvcConfig.java:
+拦截器部分，若要屏蔽拦截器功能只需注释掉LoginHandlerinterceptor.java中的if()...return false;部分即可（即永远返回TRUE即可）
+若不屏蔽拦截器功能，只拦截特定url，则需在MyWebMvcConfig.java中   excludePathPatterns()中加上登录界面所需的静态资源的url即可
+以ww版本为准
+
 ## 2023 5.4  sql修改
 
 ```
