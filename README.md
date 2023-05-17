@@ -1,11 +1,59 @@
 # NovelNook
 
+
 ## 2023 5.16
 
 加入homepage页面，在src/homepage中
 各组可测试跳转有无问题
 
 加入super user，主页src/static/super_user/index.html,添加删除搜索admin功能
+## 2023 5.8 alipay api
+
+ 1. 确保有Alipay、Alipayconfig、Alipaycontroller三个文件，并在之后修改application.yaml
+
+ 2. https://natapp.cn/article/natapp_newbie  按这个流程来
+
+    其中   端口为 8080
+
+    			config.ini文件只需要写两行：
+
+    ```
+    [default]
+    authtoken=你的token
+    ```
+
+    运行natapp.exe（不要停），拿到一个网址http://example.natappfree.cc
+
+ 3. 在resources/application.yaml中，修改alipayconfig.notifyUrl
+
+    ```yaml
+    alipayconfig:
+      appId: 2021000122683765
+      appPrivateKey: xxxxxxxxx不用改
+      alipayPublicKey: xxxxxxx不用改
+      notifyUrl: http://example.natappfree.cc(你的网址)/alipay/notify     #每个人不一样，要修改
+    ```
+
+    修改完后，就不用管这个网址了，相关操作还是在 http://localhost:8080/ 进行，但是natapp.exe要一直运行
+
+    4. http://localhost:8080/alipay/pay?subject=xxxx&traceNo=xxx&totalAmount=xxxx
+
+    通过这个URL跳转到付款，三个参数分别是   订单名;  订单编号;  总金额
+
+    对应returned表，应该是    订单名(随意，建议bookname);   borrowid;   fineamount
+
+    **注意**：订单编号（borrowid）好像不能重复用，每次测试得在returned表里新添一条。猜测一个商家账户的订单编号唯一，
+
+    因此patron组生成borrowid的时候得带点随机性
+
+    5. 跳转到付款界面，可以用账密登录付款（账号：lvslof1406@sandbox.com      密码： 111111）  虚拟金额随便用
+
+    也可以用app”支付宝客户端沙箱版“ 扫码（仅安卓有）
+
+    6. 付款成功，会自动访问一次notifyUrl，并且在returned表中对应这一记录的ispay置为1，前端刷新一次页面重新拿returned表的数据就可以。
+
+    
+
 ## 2023 5.4  sql修改
 
 ```
