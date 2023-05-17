@@ -15,7 +15,8 @@ LoginHandlerinterceptor.java/MyWebMvcConfig.java:
 拦截器部分，若要屏蔽拦截器功能只需注释掉LoginHandlerinterceptor.java中的if()...return false;部分即可（即永远返回TRUE即可）
 若不屏蔽拦截器功能，只拦截特定url，则需在MyWebMvcConfig.java中   excludePathPatterns()中加上登录界面所需的静态资源的url即可
 以ww版本为准
-=======
+
+
 ## 2023 5.8 alipay api
 
  1. 确保有Alipay、Alipayconfig、Alipaycontroller三个文件，并在之后修改application.yaml
