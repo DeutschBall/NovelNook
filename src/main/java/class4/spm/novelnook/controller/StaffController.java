@@ -38,6 +38,9 @@ public class StaffController {
     //log in
     @RequestMapping("/login")
     public String login(@RequestParam("userid") int userid, @RequestParam("password") String password, HttpSession session) {
+        if(session.getAttribute("staffID") != null) {
+            session.removeAttribute("staffID");
+        }
         Staff staff = staffServiceImpl.getStaffById(userid);
         //具体的业务
         if (Objects.equals(staff.getPassword(), password)) {
@@ -79,7 +82,7 @@ public class StaffController {
 
     //未交罚款总额
     @GetMapping("/fine/total")
-    public int showUnpayAmount() {
+    public double showUnpayAmount() {
         return staffServiceImpl.getUnpayAmount();
     }
 
