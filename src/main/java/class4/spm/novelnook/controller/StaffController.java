@@ -1,16 +1,17 @@
 package class4.spm.novelnook.controller;
 
 
-import class4.spm.novelnook.pojo.Book;
-import class4.spm.novelnook.pojo.FineInfo;
-import class4.spm.novelnook.pojo.Patron;
-import class4.spm.novelnook.pojo.Staff;
+import class4.spm.novelnook.mapper.StaffMapper;
+import class4.spm.novelnook.pojo.*;
 import class4.spm.novelnook.service.StaffServiceImpl;
-import jakarta.servlet.http.HttpServletResponse;
+import com.alibaba.fastjson.JSONObject;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -22,6 +23,9 @@ public class StaffController {
 
     @Autowired
     StaffServiceImpl staffServiceImpl;
+
+    @Autowired
+    StaffMapper staffMapper;
 
     //还书
     @GetMapping("/book/return/{borrowid}/{returntime}")
@@ -85,6 +89,11 @@ public class StaffController {
     public double showUnpayAmount() {
         return staffServiceImpl.getUnpayAmount();
     }
+    //已交罚款总额
+    @GetMapping("/fine/paidTotal")
+    public double showPaidAmount() {
+        return staffMapper.getPaidAmount();
+    }
 
     //本人信息
     @GetMapping("/whoIam")
@@ -103,13 +112,19 @@ public class StaffController {
         return staffServiceImpl.getUnpayInfoAll();
     }
 
+    //所有已交罚款信息
+    @GetMapping("/fine/show/paidAll")
+    public List<FineInfo> showPaidInfoAll() {
+        return staffMapper.getPaidInfoAll();
+    }
+
 //    patron
-//获取一个patron信息
+
+    //根据userid 找patron
     @GetMapping("/patron/show/{userid}")
     public Patron getOnePatron(@PathVariable int userid){
-    return staffServiceImpl.getOnePatron(userid);
+    return staffMapper.getPatronById(userid);
 }
-
     //增加
     @PostMapping ("/patron/add/{firstname}/{lastname}/{email}/{telephone}")
     public Patron addPatron(@PathVariable("firstname") String firstname, @PathVariable("lastname") String lastname, @PathVariable("email") String email, @PathVariable("telephone") String telephone) {
@@ -133,7 +148,7 @@ public class StaffController {
 //book
     // 获取所有book信息
     @GetMapping("/book/show/all")
-    public List<Book> getAllBooks() {
+    public List<BookWithISBN> getAllBooks() {
         return staffServiceImpl.getAllBooks();
     }
 
@@ -163,6 +178,92 @@ public class StaffController {
         return staffServiceImpl.UpdateBook(bookid, bookname, press, author, publishtime, catagory, remain, introduction,
                 location);
     }
+
+
+
+
+    //查isbn  一个ip一天 20次的上限？
+    @GetMapping("/book/getByISBN/{isbn}")
+    public BookWithISBN getBookByISBN(@PathVariable("isbn") String isbn) {
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity
+                ("http://47.99.80.202:6066/openApi/getInfoByIsbn?isbn=" + isbn +"&appKey=ae1718d4587744b0b79f940fbef69e77", String.class);
+
+        JSONObject json = JSONObject.parseObject(response.getBody());
+        JSONObject data = json.getJSONObject("data");
+
+        BookWithISBN book = new BookWithISBN();
+        book.setBookname(data.getString("bookName"));
+        book.setPress(data.getString("press"));
+        book.setAuthor(data.getString("author"));
+        book.setPublishtime(data.getString("pressDate"));
+        book.setCatagory("novel");
+        book.setIntroduction(data.getString("bookDesc"));
+        book.setIsbn(isbn);
+
+        // 向前端返回，仅展示，未插入数据库
+        return book;
+    }
+    //通过ISBN添加
+    @GetMapping("/book/addByISBN/{isbn}/{remain}/{location}")
+    @Transactional
+    public int getBookInfoByISBN(@PathVariable("isbn") String isbn, @PathVariable("remain") int remain, @PathVariable("location")String location) {
+
+        //设置url
+        String url = "http://47.99.80.202:6066/openApi/getInfoByIsbn?isbn=" + isbn +"&appKey=ae1718d4587744b0b79f940fbef69e77";
+        //访问并获得返回
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        System.out.println(response);
+
+        JSONObject json = JSONObject.parseObject(response.getBody());
+        JSONObject data = json.getJSONObject("data");
+
+        if(data == null) {
+            return -1; //接口调用次数不足
+        }
+
+        Book book = new Book();
+        book.setBookname(data.getString("bookName"));
+        book.setPress(data.getString("press"));
+        book.setAuthor(data.getString("author"));
+        book.setPublishtime(data.getString("pressDate"));
+        book.setCatagory("novel");
+        book.setIntroduction(data.getString("bookDesc"));
+        book.setRemain(remain);
+        book.setLocation(location);
+
+        // 向前端返回
+        return staffMapper.addBookByISBN(book) * staffMapper.add_isbn_bookid(isbn, book.getBookid());
+
+    }
+
+    //根据bookname找书
+    @GetMapping("/book/get/{bookname}")
+    public BookWithISBN getBookByBookName(@PathVariable("bookname") String bookname) {
+        return staffMapper.serachByBookName(bookname);
+    }
+
+
+    //根据userid 找patron
+    @GetMapping("/patron/get/userid/{userid}")
+    public Patron getPatronById(@PathVariable int userid){
+        return staffMapper.getPatronById(userid);
+    }
+    //根据firstname 找patron
+    @GetMapping("/patron/get/firstname/{firstname}")
+    public List<Patron> getOnePatronByFirstname(@PathVariable String firstname){
+        return staffMapper.getPatronByFirstname(firstname);
+    }
+    //根据firstname 找patron
+    @GetMapping("/patron/get/lastname/{lastname}")
+    public List<Patron> getOnePatronByLastname(@PathVariable String lastname){
+        return staffMapper.getPatronByLastname(lastname);
+    }
+
+
 
 
 

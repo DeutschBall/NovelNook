@@ -12,19 +12,9 @@ DROP TABLE IF EXISTS patron;
 DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS superuser;
 
-#关于用户，老师要求是id、password自动生成后再给用户展示， 所以：user表全拆开，userid都是自增
-#登录就用user id + passowrd，选择哪个身份就查哪个表
-
-#第一次release后变动5.3版
-
-#删除user表   		新建 admin表、superuser表
-#	patron表 	    userid自增   删掉username
-#	staff表 		 username改成userid，自增
-#book表              bookid自增 添加location字段;   添加book测试数据
-#brorrw表、reservation表       参照的都是patron的userid
-
-#5.4更改  新增returned表
-#5.5 borrow表 resvation表用的userid bookid还是varchar，改成int
+#5.19  book表的publishtime改为vachar，因为从isbn接口拿到的出版日期不一定完整。对程序没什么影响，本来book类的publishtime就是String
+#      新增了isbn_bookid表
+#      添加了book数据
 
 insert into staff values (123,'123','1','2','3','qewqe','asdad');
 CREATE  TABLE IF NOT EXISTS staff(
@@ -76,7 +66,7 @@ CREATE TABLE IF NOT EXISTS book(
                                    bookname VARCHAR(255),
                                    press VARCHAR(255),
                                    author VARCHAR(255),
-                                   publishtime DATE,
+                                   publishtime VARCHAR(255),
                                    catagory VARCHAR(255),
                                    remain int,
                                    introduction TEXT,
@@ -118,6 +108,12 @@ CREATE TABLE IF NOT EXISTS fine(
                                  money numeric(10,2)
   );
 
+CREATE TABLE IF NOT EXISTS isbn_bookid(
+                                 isbn VARCHAR(255) PRIMARY KEY,
+                                 bookid int,
+                                 FOREIGN KEY(bookid) REFERENCES book(bookid) ON UPDATE CASCADE ON DELETE CASCADE
+  );
+
 # CREATE TABLE IF NOT EXISTS user(
 #                                    userid VARCHAR(255) PRIMARY KEY,
 #                                    username VARCHAR(255),
@@ -131,27 +127,6 @@ CREATE TABLE IF NOT EXISTS fine(
 
 #下面是一些测试用的数据,由GPT生成,感谢GPT的劳动^~^
 # From GPT
-
-INSERT INTO book(bookname, press, author, publishtime, catagory, remain, introduction, location) VALUES
-('The Great Gatsby', 'Scribner', 'F. Scott Fitzgerald', '1925-04-10', 'Fiction', 10, 'The story of the mysterious Jay Gatsby and his love for the beautiful Daisy Buchanan.', '101-1-1-01'),
-('To Kill a Mockingbird', 'J. B. Lippincott & Co.', 'Harper Lee', '1960-07-11', 'Fiction', 8, 'The story of young Scout Finch and her father, a lawyer who defends a black man in a small southern town.', '101-1-2-06'),
-('1984', 'Secker & Warburg', 'George Orwell', '1949-06-08', 'Fiction', 12, 'The story of Winston Smith and his rebellion against a totalitarian regime that controls every aspect of citizen lives.', '101-2-5-42'),
-('The Catcher in the Rye', 'Little, Brown and Company', 'J.D. Salinger', '1951-07-16', 'Fiction', 6, 'The story of Holden Caulfield, a teenage boy struggling with alienation and loss.', '105-3-4-14'),
-('Pride and Prejudice', 'T. Egerton, Whitehall', 'Jane Austen', '1813-01-28', 'Fiction', 14, 'The story of the Bennet sisters and their search for love in early 19th century England.', '203-16-3-56'),
-('The Hobbit', 'George Allen & Unwin', 'J.R.R. Tolkien', '1937-09-21', 'Fantasy', 9, 'The story of Bilbo Baggins and his adventures with a group of dwarves to reclaim their stolen treasure.', '203-16-3-57'),
-('The Lord of the Rings', 'George Allen & Unwin', 'J.R.R. Tolkien', '1954-07-29', 'Fantasy', 11, 'The story of Frodo Baggins and his quest to destroy the One Ring, an evil artifact created by the Dark Lord Sauron.', '203-16-3-58'),
-('The Hunger Games', 'Scholastic Corporation', 'Suzanne Collins', '2008-09-14', 'Science Fiction', 15, 'The story of Katniss Everdeen, a young girl forced to compete in a televised battle to the death in a post-apocalyptic world.', '203-16-3-59'),
-('The Da Vinci Code', 'Doubleday', 'Dan Brown', '2003-03-18', 'Mystery', 3, 'The story of Robert Langdon, a symbologist who must solve a murder and decipher clues related to the Holy Grail.', '204-15-1-34'),
-('The Girl with the Dragon Tattoo', 'Norstedts förlag', 'Stieg Larsson', '2005-08-01', 'Mystery', 4, 'The story of Lisbeth Salander, a hacker who assists journalist Mikael Blomkvist in his investigation into a wealthy family dark secrets.', '204-15-1-38'),
-('The Picture of Dorian Gray', 'Lippincott Monthly Magazine', 'Oscar Wilde', '1890-07-01', 'Fiction', 6, 'The story of a young man who makes a Faustian bargain to remain forever young and beautiful, while his portrait ages and shows the effects of his moral decay.', '504-5-1-34'),
-('The Road', 'Alfred A. Knopf', 'Cormac McCarthy', '2006-09-26', 'Fiction', 9, 'The story of a father and his young son journeying through a post-apocalyptic world, facing danger and desperation at every turn.', '324-5-1-34'),
-('The Martian', 'Crown Publishing Group', 'Andy Weir', '2011-09-27', 'Science Fiction', 12, 'The story of Mark Watney, an astronaut stranded on Mars who must use his knowledge and resourcefulness to survive and find a way home.', '514-2-1-34'),
-('The Fault in Our Stars', 'Dutton Books', 'John Green', '2012-01-10', 'Young Adult', 5, 'The story of Hazel and Gus, two teenagers with terminal cancer who fall in love and embark on a journey of hope and heartbreak.', '121-12-3-55');
-
-
-
-
-
 
 -- 生成20条随机数据 patron
 INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VALUES
@@ -206,3 +181,51 @@ WHERE borrow.status = 'returned' and returned.ispay = 0;
 
 INSERT INTO fine(money) VALUES
 (2);
+
+#==============重新生成book信息============================
+insert into book (bookname, press, author, publishtime, catagory, remain, introduction, location)
+values  ('1984', 'New American Library,', 'by George Orwell', '1977-01-01', 'Fiction', 12, 'a novel', '101-1-1-21'),
+        ('The Great Gatsby', '', 'F. Scott Fitzgerald', '2004-9-30', 'Literature', 13, 'In 1922, F. Scott Fitzgerald announced his decision to write &#34;something new--something extraordinary and beautiful and simple and intricately patterned.&#34; That extraordinary, beautiful, intricately patterned, and above all, simple novel became The Great Gatsby, arguably Fitzgerald&#39;s finest work and certainly the book for which he is best known. A portrait of the Jazz Age in all ...', '202-1-2-11'),
+        ('Moby-Dick or, The Whale', '', 'Herman Melville', '2003-2-21', 'novel', 11, '&#34;It is the horrible texture of a fabric that should be woven of ships&#39; cables and hawsers. A Polar wind blows through it, and birds of prey hover over it.&#34;    So Melville wrote of his masterpiece, one of the greatest works of imagination in literary history. In part, Moby-Dick is the story of an eerily compelling madman pursuing an unholy war against a creature as vast and dangero...', '102-1-1-07'),
+        ('The Catcher in the rye', 'Little Brown and Company', 'Salinger', '2014-01-01', 'Literature', 22, 'The hero-narrator of The Catcher in the Rye is an ancient child of sixteen, a native New Yorker named Holden Caulfield. Through circumstances that tend to preclude adult, secondhand description, he leaves his prep school in Pennsylvania and goes underground in New York City for three days. The boy himself is at once too simple and too complex for us to make any final comment about him or his story. Perhaps the safest thing we can say about Holden is that he was born in the world not just strongly attracted to beauty but, almost, hopelessly impaled on it. There are many voices in this novel: children''s voices, adult voices, underground voices-but Holden''s voice is the most eloquent of all. Transcending his own vernacular, yet remaining marvelously faithful to it, he issues a perfectly articulated cry of mixed pain and pleasure. However, like most lovers and clowns and poets of the higher orders, he keeps most of the pain to, and for, himself. The pleasure he gives away, or sets aside, with all his heart. It is there for the reader who can handle it to keep.
+J.D. Salinger''s classic novel of teenage angst and rebellion was first published in 1951. The novel was included on Time''s 2005 list of the 100 best English-language novels written since 1923. It was named by Modern Library and its readers as one of the 100 best English-language novels of the 20th century. It has been frequently challenged in the court for its liberal use of profanity and portrayal of sexuality and in the 1950''s and 60''s it was the novel that every teenage boy wants to read.', '103-2-1-21'),
+        ('To The Lighthouse', '', 'Virginia Woolf', '1989', 'Fiction', 25, '', '201-2-1-01'),
+        ('The Lord of the Rings', '', 'J.R.R. Tolkien', '2005-10-12', 'Literature', 18, 'One Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them In ancient times the Rings of Power were crafted by the Elven-smiths, and Sauron, the Dark Lord, forged the One Ring, filling it with his own power so that he could rule all others. But the One Ring was taken from him, and though he sought it throughout Middle-earth, it re...', '301-1-3-12'),
+        ('Brave New World', '', 'Aldous Huxley', '2006-10-17', 'novel', 11, 'Aldous Huxley&#39;s tour de force, &#34;Brave New World&#34; is a darkly satiric vision of a &#34;utopian&#34; future where humans are genetically bred and pharmaceutically anesthetized to passively serve a ruling order. A powerful work of speculative fiction that has enthralled and terrified readers for generations, it remains remarkably relevant to this day as both a warning to be heeded as we h...', '101-1-1-13'),
+        ('纳尼亚故事集', 'HarperTrophy', 'C. S. Lewis, Pauline Baynes（Illustrator）', '1994-07-01', 'Literature', 10, 'The Chronicles of Narnia， by C.S. Lewis， is one of the very few sets of books that should be read three times： in childhood， early adulthood， and late in life. In brief， four children travel repeatedly to a world in which they are far more than mere children and everything is far more than it seems. Richly told， populated with fascinating characters， perfectly realized in detail of world and pacing of plot， and profoundly allegorical， the story is infused throughout with the timeless issues of good and evil， faith and hope. This boxed set edition includes all seven volumes.：', '101-1-2-24'),
+        ('The Hobbit; or, There and Back Again', '', 'J. R. R. Tolkien', '2012-9-18', 'novel', 14, 'J.R.R. Tolkien&#39;s classic prelude to his Lord of the Rings trilogy    Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely traveling any farther than his pantry or cellar. But his contentment is disturbed when the wizard Gandalf and a company of dwarves arrive on his doorstep one day to whisk him away on an adventure. They have launched a plot to raid the tr...', '104-1-1-03'),
+        ('Jane Eyre', 'Penguin,', 'Charlotte, Bronte', '2006-01-01', 'Literature', 16, 'A novel of intense power and intrigue, Jane Eyre has dazzled generations of readers with its depiction of a woman''s quest for freedom. Having grown up an orphan in the home of her cruel aunt and at a harsh charity school, Jane Eyre becomes an independent and spirited survivor-qualities that serve her well as governess at Thornfield Hall. But when she finds love with her sardonic employer, Rochester, the discovery of his terrible secret forces her to make a choice. Should she stay with him whatever the consequences or follow her convictions, even if it means leaving her beloved? This updated Penguin Classics edition features a new introduction by Brontë scholar and award-winning novelist Stevie Davies, as well as comprehensive notes, a chronology, further reading, and an appendix.', '105-1-1-04'),
+        ('Adventures of Huckleberry Finn', 'Penguin Classics', 'Mark Twain', '2014-11', 'novel', 20, '', '203-2-1-21'),
+        ('Fahrenheit 451', 'Simon & Schuster', 'Ray Bradbury', '2013-6-10', 'Art', 23, 'Ray Douglas Bradbury (/ˈbrædˌbɛri/; August 22, 1920 – June 5, 2012) was an American author and screenwriter. He worked in a variety of genres, including fantasy, science fiction, horror, and mystery fiction.
+Widely known for his dystopian novel Fahrenheit 451 (1953), and his science-fiction and horror-story collections, The Martian Chronicles (1950), The Illustrated Man (1951), and I Sing the Body Electric (1969), Bradbury was one of the most celebrated 20th- and 21st-century American writers.[2] While most of his best known work is in speculative fiction, he also wrote in other genres, such as the coming-of-age novel Dandelion Wine (1957) and the fictionalized memoir Green Shadows, White Whale (1992).
+Recipient of numerous awards, including a 2007 Pulitzer Citation, Bradbury also wrote and consulted on screenplays and television scripts, including Moby Dick and It Came from Outer Space. Many of his works were adapted to comic book, television, and film formats.
+Upon his death in 2012, The New York Times called Bradbury "the writer most responsible for bringing modern science fiction into the literary mainstream"', '101-2-2-19'),
+        ('The Odyssey ', 'Penguin Books', 'Fagles Robert Homer', '1997-01-01', 'Art', 12, null, '101-2-3-08'),
+        ('Frankenstein', 'Penguin Classics', 'Mary Shelley', '2003-5', 'novel', 22, '在线阅读本书
+
+  Edited by Maurice Hindle.', '107-3-4-06'),
+        ('Gone with the Wind', 'Pocket Books', 'Margaret Mitchell', '2008-01-01', 'Literature', 8, 'Margaret Mitchell''s epic novel of love and war won the Pulitzer Prize and went on to give rise to two authorized sequels and one of the most popular and celebrated movies of all time.  Many novels have been written about the Civil War and its aftermath. None take us into the burning fields and cities of the American South as  Gone With the Wind  does, creating haunting scenes and thrilling portraits of characters so vivid that we remember their words and feel their fear and hunger for the rest of our lives.  In the two main characters, the white-shouldered, irresistible Scarlett and the flashy, contemptuous Rhett, Margaret Mitchell not only conveyed a timeless story of survival under the harshest of circumstances, she also created two of the most famous lovers in the English-speaking world since Romeo and Juliet.', '401-1-1-05'),
+        ('The Scarlet Letter (Dover Thrift Editions)', '', 'Nathaniel Hawthorne', '1994-05-02', 'Fiction', 31, 'For nearly a century and a half, Hawthorne&#39;s masterpiece has mesmerized readers and critics alike. One of the greatest American novels, its themes of sin, guilt, and redemption, woven through a story of adultery in the early days of the Massachusetts Colony, are revealed with remarkable psychological penetration and understanding of the human heart. New introductory Note.    ', '111-3-4-22'),
+        ('The Grapes of Wrath', '', 'John Steinbeck', '2006-3-28', 'novel', 16, 'First published in 1939, Steinbeck’s Pulitzer Prize-winning epic of the Great Depression chronicles the Dust Bowl migration of the 1930s and tells the story of one Oklahoma farm family, the Joads—driven from their homestead and forced to travel west to the promised land of California. Out of their trials and their repeated collisions against the hard realities of an America div...', '302-2-1-12'),
+        ('Animal Farm', '', '', '1996-4-1', 'Fiction', 24, 'Since its publication in 1946, George Orwell&#39;s fable of a workers&#39; revolution gone wrong has rivaled Hemingway&#39;s The Old Man and the Sea as the Shortest Serious Novel It&#39;s OK to Write a Book Report About. (The latter is three pages longer and less fun to read.) Fueled by Orwell&#39;s intense disillusionment with Soviet Communism, Animal Farm is a nearly perfect piece of writing, bo...', '501-2-1-15');
+
+#============== bookid 替换成上面插入书后的实际bookid==========================
+insert into novelnook.isbn_bookid (isbn, bookid)
+values  ('9780451524935', 42),
+        ('9780743273565', 47),
+        ('9780142437247', 49),
+        ('9780316769488', 50),
+        ('9780156907392', 51),
+        ('9780618640157', 53),
+        ('9780060850524', 54),
+        ('9780064471190', 55),
+        ('9780547928227', 56),
+        ('9780141441146', 57),
+        ('9780143107323', 58),
+        ('9781451673319', 59),
+        ('9780140268867', 60),
+        ('9780141439471', 61),
+        ('9781416548942', 62),
+        ('9780486280486', 63),
+        ('9780143039433', 64),
+        ('9780451526342', 65);

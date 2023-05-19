@@ -2,12 +2,9 @@ package class4.spm.novelnook.service;
 
 import class4.spm.novelnook.mapper.StaffMapper;
 import class4.spm.novelnook.pojo.*;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -154,7 +151,7 @@ public class StaffServiceImpl implements StaffService {
 
 //book
     // 获取所有书信息
-    public List<Book> getAllBooks() {
+    public List<BookWithISBN> getAllBooks() {
         return staffMapper.getAllBooks();
     }
 

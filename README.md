@@ -1,5 +1,17 @@
 # NovelNook
 
+## 2023.5.19 数据库修改
+
+- book表的 publishtime 由 data 改为 vachar(255)
+
+    因为从isbn接口拿到的出版日期不一定完整。改一下数据库就行，程序应该不用改，本来Book类的publishtime就是String
+
+- 新增了 isbn_bookid表
+
+- 添加了 book表 数据
+
+    把之前的book数据删掉，用新的、跟ISBN有关联的
+
 
 
 ## 2023 5.16
