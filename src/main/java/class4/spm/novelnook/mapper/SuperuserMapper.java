@@ -37,4 +37,7 @@ public interface SuperuserMapper {
 
     @Select("SELECT * FROM admin WHERE userid = #{userid}")
     public admin findByUserid(int userid);
+
+    @Select("SELECT * FROM superuser WHERE userid = #{userid}")
+    public Superuser findBySuperUserid(int userid);
 }

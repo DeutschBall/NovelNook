@@ -37,4 +37,6 @@ public class SuperuserServiceImpl implements SuperuserService {
     }
 
     public admin findByUserid(int userid){return superuserMapper.findByUserid(userid);}
+
+    public Superuser findBySuperUserid(int userid){return superuserMapper.findBySuperUserid(userid);}
 }

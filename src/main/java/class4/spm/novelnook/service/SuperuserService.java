@@ -30,4 +30,6 @@ public interface SuperuserService {
 
     public void findByUsername(String username) ;
 
+    public Superuser findBySuperUserid(int userid);
+
 }

@@ -11,6 +11,7 @@ import class4.spm.novelnook.pojo.admin;
 
 import java.util.List;
 import class4.spm.novelnook.pojo.admin;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/superuser")
@@ -51,4 +52,9 @@ public class SuperuserController {
 
     @GetMapping("/find-by-userid")
     public admin findByUserid(@RequestParam int userid){return superuserService.findByUserid(userid);}
+
+    @GetMapping("/find-superuser-by-userid")
+    public Superuser findBySuperUserid(@RequestParam int userid){return superuserService.findBySuperUserid(userid);}
+
+
 }
