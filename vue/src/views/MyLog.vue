@@ -4,7 +4,6 @@
     <table>
       <thead>
       <tr>
-        <th>Borrow ID</th>
         <th>Book ID</th>
         <th>Book Name</th>
         <th>Location</th>
@@ -17,9 +16,8 @@
       <tr v-for="(book, index) in bookList" :key="index" :class="{ 'borrowing': book.status==='borrowing', 'returned': book.status==='returned' }">
         <!--界面跳转-->
         <td><router-link :to="'/'+$route.params.userid+'/'+book.bookid+'/bookinfo'" >
-          {{book.borrowid}}
+          {{ book.bookid }}
         </router-link></td>
-        <td>{{ book.bookid }}</td>
         <td>{{ book.bookname }}</td>
         <td>{{ book.location }}</td>
         <td>{{ book.borrowtime }}</td>

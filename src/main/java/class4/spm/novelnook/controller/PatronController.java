@@ -90,7 +90,7 @@ public class PatronController {
     //获取罚款金额
     @ResponseBody
     @GetMapping("/count/ticket/{userid}")
-    public int getFineAmount(@PathVariable("userid") int userid) {
+    public Double  getFineAmount(@PathVariable("userid") int userid) {
         return patronServiceImpl.getFineAmount(userid);
     }
 

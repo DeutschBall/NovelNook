@@ -2,6 +2,7 @@ package class4.spm.novelnook.mapper;
 
 
 import class4.spm.novelnook.pojo.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,8 @@ public interface PatronMapper {
 
     //获取所有borrow信息
     @Select("select borrowid,bookid,bookname,location,borrowtime,deadline,status " +
-            "from book natural join borrow where userid = #{userid}")
+            "from book natural join borrow where userid = #{userid} " +
+            "order by borrowtime")
     List<BorrowRecords> getBorrowList(int userid);
 
     //获取book信息
@@ -77,7 +79,7 @@ public interface PatronMapper {
 
     //获取未支付金额
     @Select("select sum(fineamount) from returned natural join borrow where userid = #{userid} and ispay = 0")
-    int getFineAmount(int userid);
+    Double getFineAmount(int userid);
 
     //预约图书
     @Insert("insert into reservation(reservationid,userid, bookid, reservationtime, status)"+
@@ -119,4 +121,19 @@ public interface PatronMapper {
             "where userid = #{userid} and bookid = #{bookid} and status != 'canceled'")
     void updateReservation(int userid, int bookid, String status);
 
+    /*-----------------------------------------------------------------------------------------*/
+
+    //
+    // release 3
+    //
+
+    //获取借书限制
+    @Select("select limitnum from booklimit")
+    Integer getBookLimit();
+
+    //更新book_realid
+    @Update("update book_realid set borrowid = #{borrowid} " +
+            "where realid in " +
+            "(select realid from (select min(realid) as realid from book_realid where bookid = #{bookid} and borrowid IS NULL ) as r)")
+    void updateBookRealid(String borrowid, int bookid);
 }

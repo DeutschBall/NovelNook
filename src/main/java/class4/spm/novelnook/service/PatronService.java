@@ -43,7 +43,7 @@ public interface PatronService {
     List<Returned> getTicketList(int userid);
 
     //获取罚款金额
-    int getFineAmount(int userid);
+    Double  getFineAmount(int userid);
 
     //预约图书
     String reserveBook(int userid, int bookid);
