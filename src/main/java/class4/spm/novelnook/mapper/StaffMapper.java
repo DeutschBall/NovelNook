@@ -24,20 +24,6 @@ public interface StaffMapper {
     @Select("select money from fine ORDER BY id DESC LIMIT 1;")
     double getFineRule();
 
-    //还书
-    //1. 查借阅记录
-    @Select("select * from borrow where borrowid = #{borrowid}")
-    Borrow getBorrowRecord(@Param("borrowid") String borrrowid);
-    //2. book remain+1
-    @Update("update book set remain = remain + 1 where bookid = #{bookid}")
-    int returnBookRemain(@Param("bookid")int bookid);
-    //3. borrow status
-    @Update("update borrow set status = 'returned' where borrowid = #{borrowid}")
-    int returnBookBorrowStatus(@Param("borrowid")String borowid);
-    //4. returned new
-    @Insert("Insert into returned(borrowid, returntime, fineamount, ispay) values (#{borrowid}, #{returntime}, #{fineamount}, #{ispay})")
-    int returnBookAddReturn(Returned returned);
-
     //书 所有剩余
     @Select("SELECT SUM(remain) FROM book")
     int getBookRemain();
@@ -107,6 +93,12 @@ public interface StaffMapper {
     // 删除书
     @Delete("DELETE FROM book WHERE bookid = #{bookid};")
     int DeleteBook(@Param("bookid") int bookid);
+    //要删的书，谁在借
+    @Select("SELECT userid FROM borrow WHERE bookid = #{bookid} AND status = 'borrowing'")
+    List<Integer> WhoBorrowing(@Param("bookid") int bookid);
+    //remain = 0而非删除
+    @Update("UPDATE book SET remain = 0 WHERE bookid = #{bookid}")
+    int setBookRemainToZero(@Param("bookid") int bookid);
 
     //删掉isbn_bookid   没必要，有外键约束自动删了
     //@Delete("DELETE FROM isbn_bookid WHERE bookid = #{bookid};")
@@ -137,8 +129,13 @@ public interface StaffMapper {
     @Options(useGeneratedKeys = true, keyProperty = "bookid",keyColumn = "bookid")
     int addBookByISBN(Book book);
     @Insert("INSERT INTO isbn_bookid(isbn, bookid) values (#{isbn}, #{bookid})")
-    int add_isbn_bookid(@Param("isbn") String isbn,@Param("bookid") int bookid);
-
+    int add_isbn_bookid(@Param("isbn") String isbn, @Param("bookid") int bookid);
+    @Insert("INSERT INTO book_realid(realid, bookid, borrowid) values (#{realid}, #{bookid}, #{borrowid})")
+    int addBookRealID(@Param("realid") String realid, @Param("bookid") int bookid, @Param("borrowid") String borrowid);
+    @Select("SELECT IFNULL(sum(bookid), -1) AS result FROM isbn_bookid WHERE isbn = #{isbn}")
+    int isExist(@Param("isbn") String isbn);
+    @Update("UPDATE book SET remain = remain + #{newRemain} WHERE bookid = #{bookid}")
+    int addRemain(@Param("bookid") int bookid, @Param("newRemain") int newRemain);
 
 
     //由bookname查书
@@ -155,5 +152,26 @@ public interface StaffMapper {
     //根据lastname 找patron
     @Select("select * from patron where lastname = #{lastname}")
     List<Patron> getPatronByLastname(@Param("lastname") String lastname);
+
+
+    //还书
+    //拿到borrowid
+    @Select("select borrowid from book_realid where realid = #{realid}")
+    String getBorrowID(@Param("realid") String realid);
+    //1. 查借阅记录
+    @Select("select * from borrow where borrowid = #{borrowid}")
+    Borrow getBorrowRecord(@Param("borrowid") String borrrowid);
+    //2. book remain+1
+    @Update("update book set remain = remain + 1 where bookid = #{bookid}")
+    int returnBookRemain(@Param("bookid")int bookid);
+    //3. borrow status
+    @Update("update borrow set status = 'returned' where borrowid = #{borrowid}")
+    int returnBookBorrowStatus(@Param("borrowid")String borowid);
+    //4. returned new
+    @Insert("Insert into returned(borrowid, returntime, fineamount, ispay) values (#{borrowid}, #{returntime}, #{fineamount}, #{ispay})")
+    int returnBookAddReturn(Returned returned);
+    //5. book_realid borrowid=null
+    @Update("update book_realid set borrowid = null where realid = #{realid}")
+    int returnBookRealidStatus(@Param("realid")String realid);
 
 }

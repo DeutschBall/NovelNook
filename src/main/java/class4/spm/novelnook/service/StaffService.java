@@ -20,9 +20,6 @@ public interface StaffService {
     //根据Id 找staff
     Staff getStaffById(int userid);
 
-    //还书
-    int returnBook(String borrowid, Date returntime);
-
     //书剩余量
     int getBookRemain();
 
@@ -63,8 +60,6 @@ public interface StaffService {
     int AddNewBook(String bookname, String press, String author, String publishtime, String catagory, int remain,
                    String introduction, String location);
 
-    // 删除书
-    int DeleteBook(int bookid);
 
     // 改书
     int UpdateBook(int bookid, String bookname, String press, String author, String publishtime, String catagory,
