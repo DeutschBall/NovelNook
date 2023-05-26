@@ -1,5 +1,11 @@
 # NovelNook
 
+## 2023.5.25 数据库修改
+
+新增book_realid表
+
+新增booklimit表
+
 ## 2023.5.19 数据库修改
 
 - book表的 publishtime 由 data 改为 vachar(255)
