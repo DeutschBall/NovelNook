@@ -2,11 +2,18 @@
   <div id="app">
     <div style="height: 60px;line-height: 60px;background-color: white; display: flex; justify-content: flex-start; align-items: center;">
       <img src="@/assets/logo.png" style="height: 60px">
-      <span style="margin-left: auto; font-family: Arial;">User ID: {{ userid }}</span>
-      <button class="view-records-btn" @click="jump(userid)">View Borrowing Records</button>
-      <router-link :to="'/'+userid+'/index'" >
-        <button class="view-records-btn">Home</button>
-      </router-link>
+      <el-dropdown @command="handleCommand" style="margin-left: auto;">
+        <span class="el-dropdown-link" style="margin-left: 20px;">
+            <span style="font-family: Arial;">{{this.userid==null ? 'Please login':'User Id: '+this.userid}}<i v-if="userid!=null" class="el-icon-arrow-down el-icon--right"></i></span>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-if="userid!=null" command>Logout</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <button class="view-records-btn" @click="jump(userid,'mylog')">View Borrowing Records</button>
+      <button class="view-records-btn" @click="jump(userid,'reservation')">View Reservation Records</button>
+      <button class="view-records-btn" @click="jump(userid,'finerecord')">View Fine Records</button>
+      <button class="view-records-btn" @click="jump(userid,'index')">Home</button>
       <img src="@/assets/user.png" alt="" style="height: 60px; margin-left: 20px;">
     </div>
     <div >
@@ -34,14 +41,56 @@
 
 export default {
   data(){
-    return { userid: "007" }
+    return {
+      userid: null
+    }
   },
-  methods:{
-    jump(userid){
+  mounted() {
+    this.$bus.$on('userid', value=>{
+      console.log(value);
+      this.userid = value
+    });
+    this.$bus.$on('logout', value=>{
+      console.log(value);
+      this.userid = value;
+    });
+    this.userid = this.$route.params.userid;
+  },
+  beforeCreate() {
+    this.$bus.$off('userid');
+    this.$bus.$off('logout');
+  },
+
+  methods: {
+    jump(userid, to) {
       this.$router.push({
-        path:"/"+userid+"/mylog"
+        path: "/" + userid + "/" + to
       })
+    },
+    //when you click log out, this method will be active
+    handleCommand() {
+      this.$toast.info("Please log in again.", {
+        position: "top-center",
+        timeout: 1200,
+        closeOnClick: true,
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        draggable: false,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false
+      });
+      this.logout()
+    },
+    logout() {
+      sessionStorage.setItem("loginID",null);
+      this.$bus.$emit('logout')
+      this.$router.push({path:'/'})
     }
   }
+
 }
 </script>

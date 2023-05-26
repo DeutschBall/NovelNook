@@ -7,7 +7,9 @@
     <p><strong>Publishtime:</strong> {{ bookInfo.publishtime }}</p>
     <p><strong>Catagory:</strong> {{ bookInfo.catagory }}</p>
     <p><strong>Remain:</strong> {{ bookInfo.remain }}</p>
-    <button class="borrow-button" @click="jump($route.params.userid,bookInfo.bookid)">Borrow Book</button>
+    <p><strong>Location:</strong> {{ bookInfo.location }}</p>
+    <button v-if="bookInfo.remain" class="borrow-button" @click="borrow($route.params.userid,bookInfo.bookid)">Borrow Book</button>
+    <button v-else class="borrow-button" @click="reserve($route.params.userid,bookInfo.bookid)">Reserve Book</button>
     <hr>
     <p><strong>Introduction:</strong></p>
     <p>{{ bookInfo.introduction }}</p>
@@ -23,17 +25,36 @@ export default {
     };
   },
   mounted() {
-    api.book.getBookInfo(this.$route.params.bookid).then(res =>{
+    api.book.getBookInfo(this.$route.params.bookid).then(res => {
       console.log(res.data);
       this.bookInfo = res.data[0];
-      console.log(this.bookInfo);
     })
   },
   methods:{
-    jump(userid,bookid){
-      this.$router.push({
-        path:"/"+userid+"/"+bookid+"/borrowresult"
-      })
+    borrow(userid, bookid) {
+      api.book.updateBorrow(userid, bookid).then(res => {
+        console.log(res.data);
+
+        if(res.data === "Success!") {
+          this.$toast.success(res.data);
+        }
+        else {
+          this.$toast.error(res.data);
+        }
+      });
+    },
+
+    reserve(userid, bookid) {
+      api.book.reserveBook(userid, bookid).then(res => {
+        console.log(res.data);
+
+        if(res.data === "Success!") {
+          this.$toast.success(res.data);
+        }
+        else {
+          this.$toast.error(res.data);
+        }
+      });
     }
   }
 }

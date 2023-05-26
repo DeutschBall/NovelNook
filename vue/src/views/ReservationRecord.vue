@@ -1,30 +1,32 @@
 <template>
   <div class="book-list">
-    <h1>Borrowing Records</h1>
+    <h1>Reservation Records</h1>
+
+
     <table>
       <thead>
       <tr>
-        <th>Borrow ID</th>
+        <th>Reservation ID</th>
         <th>Book ID</th>
         <th>Book Name</th>
         <th>Location</th>
-        <th>Borrowtime</th>
-        <th>Deadline</th>
+        <th>Reservationtime</th>
         <th>Status</th>
+        <th>Cancel</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(book, index) in bookList" :key="index" :class="{ 'borrowing': book.status==='borrowing', 'returned': book.status==='returned' }">
+      <tr v-for="(book, index) in reservationList" :key="index" :class="{ 'borrowing': book.status==='borrowing', 'returned': book.status==='returned' }">
         <!--界面跳转-->
         <td><router-link :to="'/'+$route.params.userid+'/'+book.bookid+'/bookinfo'" >
-          {{book.borrowid}}
+          {{book.reservationid}}
         </router-link></td>
         <td>{{ book.bookid }}</td>
         <td>{{ book.bookname }}</td>
         <td>{{ book.location }}</td>
-        <td>{{ book.borrowtime }}</td>
-        <td>{{ book.deadline }}</td>
+        <td>{{ book.reservationtime }}</td>
         <td>{{ book.status}}</td>
+        <td><button v-if="book.status ==='satisfied' || book.status ==='waiting'" class="pay-button" @click="cancel(book.bookid)">Cancel</button></td>
       </tr>
       </tbody>
     </table>
@@ -37,14 +39,14 @@ import api from '@/api/api';
 export default {
   data() {
     return {
-      bookList: [],
+      reservationList: [],
       dialogVisible: false
     };
   },
   mounted() {
-    api.book.getBorrowList(this.$route.params.userid).then(res =>{
+    api.book.getReservationList(this.$route.params.userid).then(res =>{
       console.log(res.data);
-      this.bookList = res.data;
+      this.reservationList = res.data;
     })
   },
   methods:{
@@ -52,7 +54,11 @@ export default {
       this.$router.push({
         path:"/"+userid+"/bookinfo"
       })
-    }
+    },
+    cancel(bookid){
+      api.book.cancelReservation(this.$route.params.userid,bookid)
+      window.location.reload()
+    },
   }
 };
 </script>
