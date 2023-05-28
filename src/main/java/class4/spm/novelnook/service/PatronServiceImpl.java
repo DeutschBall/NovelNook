@@ -144,15 +144,14 @@ public class PatronServiceImpl implements PatronService{
     // release 3
     //
 
-    //新密码两次输入不同返回Not consistent.，成功返回"OK,log in again."，旧密码不对返回"Old password or userid is wrong."
-    public String updatePatronPassword(int userid, String oldPassword, String newPassword, String newPasswordAgain) {
-        if(!newPassword.equals(newPasswordAgain))
-            return "Not consistent.";
-        if(patronMapper.SearchForPassword(userid).equals(oldPassword)) {
-            patronMapper.updatePatronPassword(userid,newPassword);
-            return "OK,log in again.";
-        }
-        return "Old password or userid is wrong.";
+    //获取旧密码
+    public String getOldPassword(int userid) {
+        return patronMapper.getOldPassword(userid);
+    }
+
+    //修改密码
+    public void updatePatronPassword(int userid, String newPassword) {
+        patronMapper.updatePatronPassword(userid, newPassword);
     }
 
     //定时发送邮件

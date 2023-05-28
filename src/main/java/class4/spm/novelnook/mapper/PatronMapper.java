@@ -138,11 +138,15 @@ public interface PatronMapper {
             "(select realid from (select min(realid) as realid from book_realid where bookid = #{bookid} and borrowid IS NULL ) as r)")
     void updateBookRealid(String borrowid, int bookid);
 
+    //获取旧密码
+    @Select("select password from patron where userid = #{userid}")
+    String getOldPassword(int userid);
+
     //修改密码
     @Update("update patron set password = #{newPassword} where userid = #{userid}")
     void updatePatronPassword(int userid,String newPassword);
 
-    //查询差7天还书的记录
+    //查询差7天还书的邮箱
     @Select("select distinct email from patron natural join borrow where status = 'borrowing' and timestampdiff(day,#{current}, deadline ) <= 7")
     List<String> getEmail(Date current);
 

@@ -64,7 +64,10 @@ public interface PatronService {
     // release 3
     //
 
+    //获取旧密码
+    String getOldPassword(int userid);
+
     //修改密码
-    String updatePatronPassword(int userid, String oldPassword, String newPassword, String newPasswordAgain);
+    void updatePatronPassword(int userid, String newPassword);
 
 }
