@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -136,4 +137,18 @@ public interface PatronMapper {
             "where realid in " +
             "(select realid from (select min(realid) as realid from book_realid where bookid = #{bookid} and borrowid IS NULL ) as r)")
     void updateBookRealid(String borrowid, int bookid);
+
+    //修改密码
+    @Update("update patron set password = #{newPassword} where userid = #{userid}")
+    void updatePatronPassword(int userid,String newPassword);
+
+    //查询差7天还书的记录
+    @Select("select distinct email from patron natural join borrow where status = 'borrowing' and timestampdiff(day,#{current}, deadline ) <= 7")
+    List<String> getEmail(Date current);
+
+    //查询差7天还书的记录
+    @Select("select bookname, deadline from borrow natural join patron natural join book where email = #{email} and status = 'borrowing' and timestampdiff(day,#{current}, deadline ) <= 7")
+    List<BorrowRecords> getUnreturnedBook(String email ,Date current);
+
+
 }

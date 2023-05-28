@@ -2,20 +2,26 @@ package class4.spm.novelnook.service;
 
 import class4.spm.novelnook.mapper.PatronMapper;
 import class4.spm.novelnook.pojo.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@EnableScheduling
 public class PatronServiceImpl implements PatronService{
 
     @Autowired
     PatronMapper patronMapper;
+    @Autowired
+    MailService mailService;
 
     //
     // 对Controller接口
@@ -130,6 +136,41 @@ public class PatronServiceImpl implements PatronService{
     //取消预约
     public void cancelReservation(int userid, int bookid) {
         patronMapper.updateReservation(userid, bookid, "canceled");
+    }
+
+    /*------------------------------------------------------------------------------------------*/
+
+    //
+    // release 3
+    //
+
+    //新密码两次输入不同返回Not consistent.，成功返回"OK,log in again."，旧密码不对返回"Old password or userid is wrong."
+    public String updatePatronPassword(int userid, String oldPassword, String newPassword, String newPasswordAgain) {
+        if(!newPassword.equals(newPasswordAgain))
+            return "Not consistent.";
+        if(patronMapper.SearchForPassword(userid).equals(oldPassword)) {
+            patronMapper.updatePatronPassword(userid,newPassword);
+            return "OK,log in again.";
+        }
+        return "Old password or userid is wrong.";
+    }
+
+    //定时发送邮件
+    @Scheduled(cron ="0 0 12 * * ?")   //设置发送时间：秒、分、时、日、月、周，*代表所有值，？代表不指定，当前设置为每天12：00
+    public void sendEmail(){
+        Date current = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> emails = patronMapper.getEmail(current);
+        StringBuilder text = new StringBuilder("");
+        System.out.println(emails);
+        for (String email : emails) {
+            List<BorrowRecords> books = patronMapper.getUnreturnedBook(email, current);
+            for(BorrowRecords book : books) {
+                text.append(book.getBookname()).append(" - Deadline:").append(sdf.format(book.getDeadline())).append("\n");
+            }
+            mailService.sendMail(email, text.toString());
+
+        }
     }
 
     //

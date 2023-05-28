@@ -6,6 +6,7 @@ import class4.spm.novelnook.pojo.Reservation;
 import class4.spm.novelnook.pojo.Returned;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -56,4 +57,14 @@ public interface PatronService {
 
     //取消预约
     void cancelReservation(int userid, int bookid);
+
+    /*---------------------------------------------------------------------*/
+
+    //
+    // release 3
+    //
+
+    //修改密码
+    String updatePatronPassword(int userid, String oldPassword, String newPassword, String newPasswordAgain);
+
 }

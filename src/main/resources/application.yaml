@@ -7,6 +7,19 @@ spring:
     password: yefan020405
     url: jdbc:mysql://localhost:3306/novelnook?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #设置发送方邮箱
+  mail:
+    default-encoding: utf-8
+    host: smtp.qq.com
+    username: 3044782@qq.com       #邮箱须要开启POP3/smtp服务
+    password: rlbmkjtdazhybiie     #密码为服务授权码
+    port: 587
+    smtp:
+      socketFactoryClass: javax.net.ssl.SSLSocketFactory
+    protocol: smtp
+
+
   resources:
     #4.26测试登录界面用部分，正式发布时请改动
     thymeleaf:

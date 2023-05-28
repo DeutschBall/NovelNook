@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Controller
 @CrossOrigin(origins = "*")
 @RequestMapping("/patron/backend")
@@ -19,6 +20,7 @@ public class PatronController {
 
     @Autowired
     PatronServiceImpl patronServiceImpl;
+
 
     //release 1
 
@@ -121,5 +123,19 @@ public class PatronController {
     public void cancelReservation(@PathVariable("userid")int userid, @PathVariable("bookid")int bookid){
         patronServiceImpl.cancelReservation(userid, bookid);
     }
+
+    /*--------------------------------------------------------------------------------------*/
+
+    //
+    // release 3
+    //
+
+    //修改密码
+    @ResponseBody
+    @GetMapping("updatepwd/{userid}/{oldPassword}/{newPassword}/{newPasswordAgain}")
+    public String updatePatronPassword(@PathVariable("userid")int userid,@PathVariable("oldPassword")String oldPassword,@PathVariable("newPassword")String newPassword,@PathVariable("newPasswordAgain")String newPasswordAgain){
+        return patronServiceImpl.updatePatronPassword(userid,oldPassword,newPassword,newPasswordAgain);
+    }
+
 
 }

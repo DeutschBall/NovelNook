@@ -1,5 +1,16 @@
 # NovelNook
 
+## Patron组release 3
+
+新增MailService类
+
+需要修改yaml文件中的邮箱配置，并将MailService类的sendMail方法中的setFrom邮箱改为yaml文件中配置的邮箱。
+测试时需要将数据库中的邮箱改为真实邮箱，否则发送的邮件会被退回
+
+使用的所有邮箱都需要在设置中开启POP3/smtp服务，具体方法可自行搜索。开启POP3/smtp服务后会生成授权码，将yaml文件中邮箱密码设置为生成的授权码
+
+定时设置在PatronServiceImpl类的sendEmail方法上方@Scheduled注解处修改
+
 
 
 ## 2023 5.16
