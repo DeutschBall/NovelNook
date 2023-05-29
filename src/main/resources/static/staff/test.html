@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Staff Test</title>
+</head>
+<body>
+
+<div id="response"></div>
+
+
+<!--         供后端测试接口的文件               -->
+
+
+
+<script>
+  var xhr = new XMLHttpRequest();
+
+  //xhr.open("GET", "http://localhost:8080/staff/patron/show/all")   GET不要用这文件
+
+  //xhr.open("POST", "http://localhost:8080/staff/patron/add/pt01/pw11/li/wang/q@12.com/t001");
+  //xhr.open("DELETE", "http://localhost:8080/staff/patron/delete/pt01");
+  //xhr.open("POST", "http://localhost:8080/staff/material/addNew/BT001/booktest/tyyyy/author-t/1912/class/80/a book");
+  //xhr.open("DELETE", "http://localhost:8080/staff/material/delete/qqearheh");
+
+  //xhr.open("PUT", "http://localhost:8080/staff/material/return/B009/008"); 还书测试
+
+  //xhr.open("DELETE", "http://localhost:8080/staff/patron/delete/40");
+
+  //xhr.open("PUT", "http://localhost:8080/staff/patron/update/39/iloveme/fffffff/Hernandez/oliviahernandez@example.com/+1-012-345-6789");
+
+  //xhr.open("POST", "http://localhost:8080/staff/patron/add/li/wang/q@12.com/1234567811");
+
+  //xhr.open("POST", "http://localhost:8080/staff/book/add/bn/pr/au/2023-05-05/fiction/10/asotry/121-12-3-55");
+
+  //xhr.open("DELETE", "http://localhost:8080/staff/book/delete/29");
+
+  //xhr.open("PUT", "http://localhost:8080/staff/book/update/28/111/111/111/2024-05-08/111/20/aaa/122-2-2-11");
+
+
+
+
+
+
+
+
+
+
+
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      document.getElementById("response").innerHTML = JSON.parse(xhr.responseText);
+    } else {
+      alert('Request failed.  Returned status of ' + xhr.status);
+    }
+  };
+  xhr.send(JSON.stringify({}));
+</script>
+</body>
+</html>

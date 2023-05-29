@@ -1,1 +1,4 @@
 .idea
+target
+README.md
+src/main/resources/application.yaml

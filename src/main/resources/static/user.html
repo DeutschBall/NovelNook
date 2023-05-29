@@ -1,0 +1,37 @@
+<!--静态资源文件,本文件用于测试AJAX和RestController的交互-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function loadXMLDoc(){
+            var xmlhttp=new XMLHttpRequest();
+            xmlhttp.responseType="json";
+            xmlhttp.onload=function()
+            {
+                console.log("ready");
+                var jsonResponse=xmlhttp.response;
+                document.getElementById("username").innerHTML=jsonResponse.username;
+                document.getElementById("password").textContent=jsonResponse.password;
+
+                console.log(jsonResponse.responseText);
+                console.log(jsonResponse.responseXML);
+            }
+            xmlhttp.open("GET","/user",true);
+            xmlhttp.send();
+        }
+    </script>
+
+</head>
+<body>
+    <div id="username">username</div>
+    <div id="password">password</div>
+
+    <button type="button" onclick="loadXMLDoc()">
+        request the server
+    </button>
+
+</body>
+</html>
