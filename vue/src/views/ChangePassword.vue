@@ -3,11 +3,11 @@
     <h2>Change Password</h2>
     <form @submit.prevent="changePassword">
       <div class="form-group">
-        <label for="currentPassword">Current Password:</label>
+        <label for="currentPassword">Old password:</label>
         <input type="password" v-model="currentPassword" required>
       </div>
       <div class="form-group">
-        <label for="newPassword">New Password:</label>
+        <label for="newPassword">New password:</label>
         <div class="password-input">
           <input
               :type="showNewPassword ? 'text' : 'password'"
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="confirmPassword">Confirm Password:</label>
+        <label for="confirmPassword">Confirm new password:</label>
         <div class="password-input">
           <input
               :type="showConfirmPassword ? 'text' : 'password'"
@@ -30,7 +30,7 @@
           >
         </div>
       </div>
-      <button type="submit">Change Password</button>
+      <button type="submit">Update password</button>
     </form>
   </div>
 </template>
