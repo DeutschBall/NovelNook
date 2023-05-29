@@ -10,6 +10,7 @@
         <th>Press</th>
         <th>Publictime</th>
         <th>Catagory</th>
+        <th>Location</th>
         <th>Remain</th>
       </tr>
       </thead>
@@ -24,6 +25,7 @@
         <td>{{ book.press}}</td>
         <td>{{ book.publishtime}}</td>
         <td>{{ book.catagory}}</td>
+        <td>{{ book.location}}</td>
         <td>{{ book.remain}}</td>
       </tr>
       </tbody>

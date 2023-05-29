@@ -38,6 +38,7 @@ public class AdminController {
     public R<List<Staff>> getStaff(){//展示列表界面
         List<Staff> list = adminMapper.ShowStaff();
         System.out.println(list);
+        System.out.println("actived");
         return R.success(list);
 
     }
@@ -93,7 +94,7 @@ public class AdminController {
      * @param staff param got from json data in RequestBody
      * @return
      */
-    @PostMapping("/staff")
+    @PostMapping ("/staff")
     public R addNewStaff(@RequestBody Staff staff) {
 
         int flag = adminMapper.addNewStaff(staff);

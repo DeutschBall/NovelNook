@@ -14,7 +14,7 @@ import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
 const routes = [
   {
     path: "/",
-    redirect: "/login",
+    redirect: "/dashboard",
   },
   {
     path: "/login",

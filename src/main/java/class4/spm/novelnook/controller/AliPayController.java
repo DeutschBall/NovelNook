@@ -1,3 +1,4 @@
+/*
 package class4.spm.novelnook.controller;
 
 import class4.spm.novelnook.common.AliPayConfig;
@@ -107,4 +108,4 @@ public class AliPayController {
         //不需要我们主动访问 /alipay/notify，所以也不需要在乎这个方法的返回
         return "success";
     }
-}
+}*/

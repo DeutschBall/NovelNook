@@ -16,8 +16,8 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/admin/**").excludePathPatterns("/admin/log.html","/admin/login");//这里只是不拦截挡登录界面，负责前端的同学记得在excludePathPatterns中加上你们的前端资源
 
-        //registry.addInterceptor(new StaffLogInterceptor())
-        //        .addPathPatterns("/staff/**").excludePathPatterns("/staff/login.html", "/staff/dist_login/**", "/staff/login");
+        registry.addInterceptor(new StaffLogInterceptor()).addPathPatterns("/staff/**").excludePathPatterns("/staff/login.html", "/staff/dist_login/**","/staff/login");
+
     }
 }
 
