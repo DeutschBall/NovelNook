@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Controller
 @CrossOrigin(origins = "*")
 @RequestMapping("/patron/backend")
@@ -20,12 +21,13 @@ public class PatronController {
     @Autowired
     PatronServiceImpl patronServiceImpl;
 
+
     //release 1
 
     //搜索图书信息
     @ResponseBody
     @GetMapping("/search/{key}/{option}")
-    public List<Book> searchForBook(@PathVariable("key") String key,@PathVariable("option") String option) {
+    public List<Book> searchForBook(@PathVariable("key") String key, @PathVariable("option") String option) {
         return patronServiceImpl.searchForBook(key, option);
     }
 
@@ -90,14 +92,14 @@ public class PatronController {
     //获取罚款金额
     @ResponseBody
     @GetMapping("/count/ticket/{userid}")
-    public int getFineAmount(@PathVariable("userid") int userid) {
+    public Double  getFineAmount(@PathVariable("userid") int userid) {
         return patronServiceImpl.getFineAmount(userid);
     }
 
     //预约图书
     @ResponseBody
     @GetMapping("/reserve/{userid}/{bookid}")
-    public String reserveBook(@PathVariable("userid") int userid , @PathVariable("bookid") int bookid){
+    public String reserveBook(@PathVariable("userid") int userid, @PathVariable("bookid") int bookid){
         return patronServiceImpl.reserveBook(userid,bookid);
     }
 
@@ -111,15 +113,36 @@ public class PatronController {
     //更新并检查预约状态
     @ResponseBody
     @GetMapping("notice/{userid}")
-    public List<String> noticeMessage(@PathVariable("userid")int userid){
+    public List<String> noticeMessage(@PathVariable("userid") int userid){
         return patronServiceImpl.checkReservationStatus(userid);
     }
 
     //取消预约
     @ResponseBody
     @GetMapping("cancel/{userid}/{bookid}")
-    public void cancelReservation(@PathVariable("userid")int userid, @PathVariable("bookid")int bookid){
+    public void cancelReservation(@PathVariable("userid") int userid, @PathVariable("bookid") int bookid){
         patronServiceImpl.cancelReservation(userid, bookid);
     }
+
+    /*--------------------------------------------------------------------------------------*/
+
+    //
+    // release 3
+    //
+
+    //获取旧密码
+    @ResponseBody
+    @GetMapping("getoldpwd/{userid}")
+    public String getOldPassword(@PathVariable("userid") int userid) {
+        return patronServiceImpl.getOldPassword(userid);
+    }
+
+    //修改密码
+    @ResponseBody
+    @GetMapping("updatepwd/{userid}/{newPassword}")
+    public void updatePatronPassword(@PathVariable("userid") int userid, @PathVariable("newPassword") String newPassword){
+        patronServiceImpl.updatePatronPassword(userid,newPassword);
+    }
+
 
 }
