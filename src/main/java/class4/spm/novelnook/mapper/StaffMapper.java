@@ -174,4 +174,8 @@ public interface StaffMapper {
     @Update("update book_realid set borrowid = null where realid = #{realid}")
     int returnBookRealidStatus(@Param("realid")String realid);
 
+    //borrow history
+    @Select("SELECT borrow.userid, book.bookname, borrow.borrowtime, borrow.deadline, borrow.status FROM borrow JOIN book ON borrow.bookid = book.bookid;")
+    List<StaffBorrowHistroy> allBorrowHistory();
+
 }

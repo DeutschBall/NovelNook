@@ -393,6 +393,14 @@ public class StaffController {
         staffMapper.addBookRealID(barcode, bookid, null);
     }
 
+    //borrow history
+    @GetMapping("/allBorrow")
+    public List<StaffBorrowHistroy> getAllBorrowHistory() {
+        // userid bookname borrowtime deadline status
+        return staffMapper.allBorrowHistory();
+    }
+
+
 
 
 }
