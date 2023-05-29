@@ -323,6 +323,7 @@ public class StaffController {
             if(staffMapper.DeleteBook(bookid) == 1) {
                 //成功删除
                 res.add(-1);
+                //还应该删掉资源中的barcode图  算了
             } else {
                 //没能成功删除 原因未知
                 res.add(-2);
