@@ -61,7 +61,7 @@ export default {
           console.log(oldpwd);
           console.log(this.currentPassword);
 
-          if (this.currentPassword !== oldpwd){
+          if (this.currentPassword !== oldpwd.toString()){
               this.$toast.error("Current password is incorrect.");
               return;
           }

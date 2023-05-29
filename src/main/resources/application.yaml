@@ -13,7 +13,7 @@ spring:
     default-encoding: utf-8
     host: smtp.qq.com
     username: 3044782@qq.com       #邮箱须要开启POP3/smtp服务
-    password: rlbmkjtdazhybiie     #密码为服务授权码
+    password: rlbmkjtdazhybiie     #密码为发送方邮箱授权码
     port: 587
     smtp:
       socketFactoryClass: javax.net.ssl.SSLSocketFactory
