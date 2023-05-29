@@ -15,9 +15,6 @@
               required
               @input="checkPasswordStrength"
           >
-          <span class="toggle-password" @click="togglePasswordVisibility('newPassword')">
-            {{ showNewPassword ? 'Hide' : 'Show' }}
-          </span>
         </div>
         <div class="password-strength" :class="passwordStrengthClass">
           {{ passwordStrengthText }}
@@ -31,9 +28,6 @@
               v-model="confirmPassword"
               required
           >
-          <span class="toggle-password" @click="togglePasswordVisibility('confirmPassword')">
-            {{ showConfirmPassword ? 'Hide' : 'Show' }}
-          </span>
         </div>
       </div>
       <button type="submit">Change Password</button>
@@ -71,6 +65,10 @@ export default {
               this.$toast.error("Current password is incorrect.");
               return;
           }
+        if (this.passwordStrength === 'weak'){
+          this.$toast.error("New password strength is too weak!");
+          return;
+        }
           //原密码正确
           api.book.updatePassword(this.$route.params.userid, this.newPassword).then(()=>{
               console.log(this.currentPassword);
@@ -78,9 +76,6 @@ export default {
               this.newPassword = '';
               this.confirmPassword = '';
               this.$toast.success('Password changed successfully!');
-              this.$router.push({
-              path: "/" + this.$route.params.userid + "/index"
-              });
           })
               .catch(error => {
                   console.error('Failed to update password:', error);
@@ -91,14 +86,6 @@ export default {
               console.error('Failed to get old password:', error);
               this.$toast.error('Failed to get old password. Please try again.');
           })
-    },
-
-    togglePasswordVisibility(field) {
-      if (field === 'newPassword') {
-        this.showNewPassword = !this.showNewPassword;
-      } else if (field === 'confirmPassword') {
-        this.showConfirmPassword = !this.showConfirmPassword;
-      }
     },
 
     //密码强度提示
