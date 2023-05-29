@@ -139,7 +139,7 @@ public class PatronController {
 
     //修改密码
     @ResponseBody
-    @GetMapping("updatepwd/{userid}/{newPassword}/")
+    @GetMapping("updatepwd/{userid}/{newPassword}")
     public void updatePatronPassword(@PathVariable("userid") int userid, @PathVariable("newPassword") String newPassword){
         patronServiceImpl.updatePatronPassword(userid,newPassword);
     }

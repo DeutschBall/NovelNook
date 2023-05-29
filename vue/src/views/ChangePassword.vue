@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import api from '@/api/api';
+
 export default {
   data() {
     return {
@@ -51,25 +53,46 @@ export default {
       showNewPassword: false,
       showConfirmPassword: false,
       passwordStrength: '',
-      passwordStrengthText: '',
+      passwordStrengthText: ''
     };
   },
   methods: {
     changePassword() {
       if (this.newPassword !== this.confirmPassword) {
-        alert("New password and confirm password don't match.");
+        this.$toast.error("New password and confirm password don't match.");
         return;
       }
+      api.book.getOldPassword(this.$route.params.userid).then(res =>{
+          const oldpwd = res.data;
+          console.log(oldpwd);
+          console.log(this.currentPassword);
 
-      //传给后台所需要的参数
-      //调用api
-
-      this.currentPassword = '';
-      this.newPassword = '';
-      this.confirmPassword = '';
-
-      alert('Password changed successfully!');
+          if (this.currentPassword !== oldpwd){
+              this.$toast.error("Current password is incorrect.");
+              return;
+          }
+          //原密码正确
+          api.book.updatePassword(this.$route.params.userid, this.newPassword).then(()=>{
+              console.log(this.currentPassword);
+              this.currentPassword = '';
+              this.newPassword = '';
+              this.confirmPassword = '';
+              this.$toast.success('Password changed successfully!');
+              this.$router.push({
+              path: "/" + this.$route.params.userid + "/index"
+              });
+          })
+              .catch(error => {
+                  console.error('Failed to update password:', error);
+                  this.$toast.error('Failed to update password. Please try again.');
+              });
+      })
+          .catch(error =>{
+              console.error('Failed to get old password:', error);
+              this.$toast.error('Failed to get old password. Please try again.');
+          })
     },
+
     togglePasswordVisibility(field) {
       if (field === 'newPassword') {
         this.showNewPassword = !this.showNewPassword;
@@ -77,6 +100,7 @@ export default {
         this.showConfirmPassword = !this.showConfirmPassword;
       }
     },
+
     //密码强度提示
     checkPasswordStrength() {
       const strength = this.calculatePasswordStrength();

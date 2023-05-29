@@ -7,13 +7,15 @@
             <span style="font-family: Arial;">{{this.userid==null ? 'Please login':'User Id: '+this.userid}}<i v-if="userid!=null" class="el-icon-arrow-down el-icon--right"></i></span>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-if="userid!=null" command>Logout</el-dropdown-item>
+          <el-dropdown-item v-if="userid!=null" command = "1">Logout</el-dropdown-item>
+          <el-dropdown-item v-if="userid!=null" command = "2">Change Pwd</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <button class="view-records-btn" @click="jump(userid,'mylog')">View Borrowing Records</button>
       <button class="view-records-btn" @click="jump(userid,'reservation')">View Reservation Records</button>
       <button class="view-records-btn" @click="jump(userid,'finerecord')">View Fine Records</button>
       <button class="view-records-btn" @click="jump(userid,'index')">Home</button>
+
       <img src="@/assets/user.png" alt="" style="height: 60px; margin-left: 20px;">
     </div>
     <div >
@@ -68,22 +70,28 @@ export default {
       })
     },
     //when you click log out, this method will be active
-    handleCommand() {
-      this.$toast.info("Please log in again.", {
-        position: "top-center",
-        timeout: 1200,
-        closeOnClick: true,
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-        draggable: false,
-        draggablePercent: 0.6,
-        showCloseButtonOnHover: false,
-        hideProgressBar: true,
-        closeButton: "button",
-        icon: true,
-        rtl: false
-      });
-      this.logout()
+    handleCommand(command) {
+      if(command === "1") {
+        this.$toast.info("Please log in again.", {
+          position: "top-center",
+          timeout: 1200,
+          closeOnClick: true,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          draggablePercent: 0.6,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: true,
+          rtl: false
+        });
+        this.logout();
+      }
+      if(command === "2") {
+        this.jump(this.userid,'changepwd');
+      }
+
     },
     logout() {
       sessionStorage.setItem("loginID",null);

@@ -7,6 +7,7 @@ import Bookinfo from '../views/Bookinfo.vue'
 import MyLog from '../views/MyLog.vue'
 import FineRecord from '../views/FineRecord.vue'
 import ReservationRecord from '../views/ReservationRecord.vue'
+import ChangePassword from "../views/ChangePassword.vue";
 
 Vue.use(VueRouter)
 
@@ -79,6 +80,17 @@ const routes = [
         requireAuthorization: true,
     },
   },
+    {
+        path: '/:userid/changepwd',
+        name: 'changepwd',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: ChangePassword,
+        meta: {
+            requireAuthorization: true,
+        },
+    },
 ]
 
 const router = new VueRouter({
