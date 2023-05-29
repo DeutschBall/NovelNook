@@ -139,7 +139,7 @@ public interface StaffMapper {
 
 
     //由bookname查书
-    @Select("SELECT b.*, ib.isbn FROM book b JOIN isbn_bookid ib ON b.bookid = ib.bookid where bookname = #{bookname}")
+    @Select("SELECT b.*, ib.isbn FROM book b JOIN isbn_bookid ib ON b.bookid = ib.bookid where bookname LIKE CONCAT('%', #{bookname}, '%')")
     BookWithISBN serachByBookName(@Param("bookname") String bookname);
 
 

@@ -257,7 +257,7 @@ public class StaffController {
             staffMapper.add_isbn_bookid(isbn, book.getBookid());
 
             //制作条形码，存
-            for (int i = 0; i < remain; i++) {
+            for (int i = 1; i <= remain; i++) {
                 createBarCode(book.getBookid(), i);
             }
             bookWithISBN = null;//将缓冲的book置null
@@ -274,7 +274,7 @@ public class StaffController {
         //还书，输入real id，日期
         //拿到borrowid
         String borrowid = staffMapper.getBorrowID(realid);
-        if (borrowid == null) { //不存在的borrowid
+        if (borrowid == null) { //不存在的borrowid (这本书没有被借)
             return -1;
         }
 
@@ -363,7 +363,7 @@ public class StaffController {
     }
 
     private void createBarCode(int bookid, int offset) throws IOException {
-        String barcode = bookid + "0000" + (offset+1);//条形码编号
+        String barcode = bookid + "0000" + offset;//条形码编号
         String barcodeFileName = barcode + ".jpg";//条形码文件名
         //调用，生成图像
         BufferedImage image = BarCode.getBarCodeWithWords(barcode, barcode, "", "");
