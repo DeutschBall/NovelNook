@@ -48,7 +48,7 @@
             </div>
             <br>
             <!-- 添加员工 -->
-            <el-button type="primary"> <router-link :to="{name:'User Profile'}">Add New Staff</router-link>   </el-button>
+            <el-button type="primary" @click="dialogAddVisible = true">Add New Staff</el-button>
 
             <el-dialog title="Add New Staff" :visible.sync="dialogAddVisible">
               <el-form :model="form">
