@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="NovelNook@localhost" uuid="a5606202-e7d7-4c3c-a42e-9a247a01ab9a">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/NovelNook</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="novelnook@localhost" uuid="525c9d9d-3985-4769-8602-2a298f705ed2">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
