@@ -9,14 +9,13 @@
 
       <md-card class="md-card-profile">
         <div class="md-card-avatar">
-          <img class="img" :src="formLabelAlign.cardUserImage" />
+          <img class="img" :src="baseUrl + formLabelAlign.cardUserImage" />
         </div>
         <input type="file" ref="file" @change="showimg" hidden />
         <md-button class="md-round md-success" @click="changeimg"
           >Change Avatar</md-button
         >
       </md-card>
-
       <md-card-content>
         <div class="md-layout">
           <!--          <div class="md-layout-item md-small-size-100 md-size-33">-->
@@ -79,31 +78,14 @@
               ></md-input>
             </md-field>
           </div>
-          <!--          <div class="md-layout-item md-small-size-100 md-size-33">-->
-          <!--            <md-field>-->
-          <!--              <label>Country</label>-->
-          <!--              <md-input v-model="country" type="text"></md-input>-->
-          <!--            </md-field>-->
-          <!--          </div>-->
-          <!--          <div class="md-layout-item md-small-size-100 md-size-33">-->
-          <!--            <md-field>-->
-          <!--              <label>Postal Code</label>-->
-          <!--              <md-input v-model="code" type="number"></md-input>-->
-          <!--            </md-field>-->
-          <!--          </div>-->
-          <!--          <div class="md-layout-item md-size-100">-->
-          <!--            <md-field maxlength="5">-->
-          <!--              <label>About Me</label>-->
-          <!--              <md-textarea v-model="aboutme"></md-textarea>-->
-          <!--            </md-field>-->
-          <!--          </div>-->
+
           <div class="md-layout-item md-size-100 text-right">
             <md-button class="md-info">
               <router-link :to="{ name: 'Dashboard' }"> back </router-link>
             </md-button>
-            <md-button class="md-raised md-success" @click="addstaff">
+            <md-button class="md-raised md-success" @click="ChangeStaff">
 <!--              <router-link :to="{ name: 'Dashboard' }"> </router-link>-->
-              Add
+              Finish
 
             </md-button>
           </div>
@@ -114,10 +96,16 @@
 </template>
 <script>
 // import UserCard from "@/pages/UserProfile/UserCard";
+import {
+  StatsCard,
+  ChartCard,
+  NavTabsCard,
+  NavTabsTable,
+  OrderedTable,
+} from "@/components";
 import axios from "axios";
 export default {
   name: "edit-profile-form",
-  // components: {UserCard},
   props: {
     dataBackgroundColor: {
       type: String,
@@ -126,8 +114,10 @@ export default {
   },
   data() {
     return {
+      hasMountedBeenCalled: false,
+      baseUrl: "http://localhost:8080/",
       formLabelAlign: {
-        // username: "",
+        userid: "",
         password: "",
         // disabled: null,
         email: "",
@@ -137,29 +127,34 @@ export default {
         cardUserImage: "",
         // require("@/assets/img/faces/marc.jpg")
       },
+    };
+  },
       // address:'',
       // city: '',
       // country: '',
       // code: '',
       // aboutme:
       //   "Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.",
-    };
-  },
+
   // computed:{
   //   imagePath() {
   //     return import(`${this.formLabelAlign.cardUserImage}`);
   //   }
   // },
-  // mounted() {
-  //   this.formLabelAlign.username=this.$route.params.username;
-  //   this.formLabelAlign.password=this.$route.params.password;
-  //   this.formLabelAlign.emailadress=this.$route.params.email;
-  //   this.formLabelAlign.lastname=this.$route.params.lastname;
-  //   this.formLabelAlign.firstname=this.$route.params.firstname;
-  //   this.formLabelAlign.telephone=this.$route.params.telephone;
-  //   this.isdiabled=this.$route.params.isdiabled;
-  //   this.formLabelAlign.cardUserImage=this.$route.params.uml;
-  // },
+  mounted() {
+    this.formLabelAlign.password=this.$route.params.password;
+    this.formLabelAlign.email=this.$route.params.email;
+    this.formLabelAlign.lastname=this.$route.params.lastname;
+    this.formLabelAlign.firstname=this.$route.params.firstname;
+    this.formLabelAlign.telephone=this.$route.params.telephone;
+    this.formLabelAlign.userid=this.$route.params.userid;
+    if (!this.hasMountedBeenCalled) {
+      // 在这里放置您希望只执行一次的代码
+      this.formLabelAlign.cardUserImage=this.$route.params.uml;
+      this.hasMountedBeenCalled = true;
+    }
+
+  },
   methods: {
     // getImgUrll(src) {
     //   // src的值是你绝对路径下图片的地址,此地址需省略开头的 @/
@@ -169,16 +164,19 @@ export default {
     changeimg() {
       this.$refs.file.dispatchEvent(new MouseEvent("click"));
     },
+
     showimg() {
       const that = this;
-      // console.log(that.$refs.file.files[0])
       var fr = new FileReader();
       fr.readAsDataURL(that.$refs.file.files[0]);
       fr.onload = function () {
+        that.baseUrl="";
         that.formLabelAlign.cardUserImage = fr.result;
       };
+
     },
-    addstaff() {
+
+    ChangeStaff() {
       let that = this;
       const file = this.$refs.file.files[0];
       // const file=null;
@@ -194,6 +192,7 @@ export default {
       const param = new FormData();
       param.append("file", file);
       // param.append("username", this.formLabelAlign.username);
+      param.append("userid", this.formLabelAlign.userid);
       param.append("password", this.formLabelAlign.password);
       param.append("firstname", this.formLabelAlign.firstname);
       param.append("lastname", this.formLabelAlign.lastname);
@@ -206,7 +205,7 @@ export default {
       //   }
       // }
       axios
-        .post("http://localhost:8080/admin/staff",param)
+        .put("http://localhost:8080/admin/staff",param)
         .then((res) => {
           // console.log(res)
           if (res.data.code === 1) {
