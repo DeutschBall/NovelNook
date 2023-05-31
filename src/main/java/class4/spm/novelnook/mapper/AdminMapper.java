@@ -1,6 +1,6 @@
 package class4.spm.novelnook.mapper;
 
-
+import class4.spm.novelnook.pojo.BookLimit;
 import class4.spm.novelnook.pojo.Staff;
 /*import class4.spm.novelnook.pojo.User;*/
 import class4.spm.novelnook.pojo.admin;
@@ -68,7 +68,10 @@ public interface AdminMapper {
             "values( #{password}, #{firstname}, #{lastname}, " +
             "#{email}, #{telephone}, #{avatar})")
     int addNewStaff(Staff staff);
-    
+
+    @Select("select * from staff where userid = #{userid}")
+    Staff selectById(int userid);
+
     /**
      * show the amount of fine
      * only 1 line in the fine table
@@ -86,5 +89,23 @@ public interface AdminMapper {
      */
     @Update("update fine set money = #{money} where id = 1")
     int updateFineMoney(Fine fine);
+
+    /**
+     * show the limit number of borrowed book
+     * only 1 line in the booklimit table
+     * @return
+     */
+    @Select("select limitnum from booklimit where id = 1")
+    BookLimit showLimitNum();
+
+    /**
+     * modify the limit number of borrowed book
+     * the default number is 5
+     * only 1 line in the booklimit table
+     * @param bookLimit
+     * @return
+     */
+    @Update("update booklimit set limitnum = #{limitnum} where id = 1")
+    int updateLimitNum(BookLimit bookLimit);
 
 }

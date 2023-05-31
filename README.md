@@ -1,11 +1,28 @@
 # NovelNook
-## 2023.5.28
-关于有时登录后无法加载staff列表的问题：
 
-解决办法
+## Patron组release 3
 
-关闭拦截器（注释掉if(userid == null)的部分，MyWebMvcConfig.java直接CTRL A / 全部注释后重新运行，再加载不出来就F5刷新一次，然后
-把原先注释的地方取消注释重新启动即可。（怎么解决的？哒哒哒滴答）
+**后端service包新增MailService类实现发送提醒邮件功能**
+
+需要修改yaml文件中的邮箱配置，并将MailService类的sendMail方法中的setFrom邮箱改为yaml文件中配置的邮箱。
+测试时需要将数据库中的邮箱改为真实邮箱，否则发送的邮件会被退回。
+
+使用的所有邮箱都需要在设置中开启POP3/smtp服务，具体方法可自行搜索。
+开启POP3/smtp服务后会生成授权码，yaml文件中的邮箱密码应设置为授权码而非真实邮箱密码。
+
+邮件提醒为定时任务，定时设置在PatronServiceImpl类的sendEmail方法上方@Scheduled注解处修改，当前设置为每天12:00发送邮件。
+
+**后端updateBorrow修改**
+
+修改借书限制，具体限制数量从booklimit表中读取。
+
+新增维护book_realid表
+
+**新增修改密码功能**
+
+新增ChangePassword.vue页面，在vue/src/views中。
+
+
 
 ## 2023.5.25 数据库修改
 

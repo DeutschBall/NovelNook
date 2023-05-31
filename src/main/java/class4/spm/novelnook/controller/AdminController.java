@@ -1,6 +1,7 @@
 package class4.spm.novelnook.controller;
 
 import class4.spm.novelnook.mapper.AdminMapper;
+import class4.spm.novelnook.pojo.BookLimit;
 import class4.spm.novelnook.pojo.Staff;
 import class4.spm.novelnook.pojo.admin;
 import class4.spm.novelnook.pojo.Fine;
@@ -71,52 +72,36 @@ public class AdminController {
         }
     }
 
-    /**
-     * update function
-     * @param staff param got from json data in RequestBody
-     * @return
-     */
-    @PutMapping("/staff")
-    public R update(@RequestBody Staff staff) {
-        //flag is used to judge whether operation is success
-        int flag = adminMapper.updateByUserName(staff);
-
-        if(flag > 0) {
-            return R.success(null);
-        }
-
-        return R.error("update fail");
-
-    }
 
     /**
      * Add new staff function
-     * @param staff param got from json data in RequestBody
+     * @param file avatar upload by user
+     * @param password user's password
+     * @param firstname user's firstname
+     * @param lastname user's lastname
+     * @param telephone user's telephone number
+     * @param email user's email
      * @return
      */
-    @PostMapping ("/staff")
-    public R addNewStaff(@RequestBody Staff staff) {
+    @PostMapping("/staff")
+    public R addNewStaff(MultipartFile file,
+                         @RequestParam String password, @RequestParam String firstname,
+                         @RequestParam String lastname, @RequestParam String telephone,
+                         @RequestParam String email) {
 
-        int flag = adminMapper.addNewStaff(staff);
-
-        if (flag > 0) {
-            return R.success(null);
-        }
-
-        return R.error("Add new staff fail.\n" + "This staff maybe exist.");
-    }
-
-    /**
-     * User can upload their own pictures as their avatar
-     * @param file   pictures upload by user
-     * @return
-     */
-    @PostMapping("/uploadAvatar")
-    public R uploadAvatar(MultipartFile file){
+        Staff staff = new Staff();
+        staff.setTelephone(telephone);
+        staff.setPassword(password);
+        staff.setLastname(lastname);
+        staff.setFirstname(firstname);
+        staff.setEmail(email);
 
         //judge whether file is null
         if (file.isEmpty()) {
-            return R.error("file not exist or file type error");
+            int flag = adminMapper.addNewStaff(staff);
+            if (flag > 0) {
+                return R.success(null);
+            }
         }
 
         //rename file
@@ -124,22 +109,94 @@ public class AdminController {
         //get suffix: .png, .jpg, etc;
         String suffix = "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         //create a random file name
-        String uuid = UUID.randomUUID().toString().replace("-","");
+        String uuid = UUID.randomUUID().toString().replace("-", "");
 
         //upload file
         ApplicationHome applicationHome = new ApplicationHome(this.getClass());
         String pre = applicationHome.getDir().getParentFile().getParentFile().getAbsolutePath()
-                + "\\src\\main\\resources\\static\\avatars\\";
+                + "\\target\\classes\\static\\avatars\\";
+
+        String baseDir = System.getProperty("user.dir");
+        System.out.println(baseDir);
+
+        try {
+            String servicePath = pre + uuid + suffix;
+            file.transferTo(new File(servicePath));
+
+            String dbPath = "/avatars/" + uuid + suffix;
+            staff.setAvatar(dbPath);
+            int flag = adminMapper.addNewStaff(staff);
+            if (flag > 0) {
+                return R.success(null);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return R.error("Add new staff fail.\n" + "This staff maybe exist or upload avatar fail");
+    }
+
+    /**
+     * update function
+     * @param file avatar upload by user
+     * @param password user's password
+     * @param firstname user's firstname
+     * @param lastname user's lastname
+     * @param telephone user's telephone number
+     * @param email user's email
+     * @return
+     */
+    @PutMapping("/staff")
+    public R update(MultipartFile file,
+                    @RequestParam int userid,
+                    @RequestParam String password, @RequestParam String firstname,
+                    @RequestParam String lastname, @RequestParam String telephone,
+                    @RequestParam String email) {
+
+        Staff staff = adminMapper.selectById(userid);
+        staff.setTelephone(telephone);
+        staff.setPassword(password);
+        staff.setLastname(lastname);
+        staff.setFirstname(firstname);
+        staff.setEmail(email);
+
+        //judge whether file is null
+        if (file.isEmpty()) {
+            int flag = adminMapper.updateByUserName(staff);
+            if (flag > 0) {
+                return R.success(null);
+            }
+        }
+
+        //rename file
+        String originalFilename = file.getOriginalFilename();
+        //get suffix: .png, .jpg, etc;
+        String suffix = "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        //create a random file name
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+
+        //upload file
+        ApplicationHome applicationHome = new ApplicationHome(this.getClass());
+        String pre = applicationHome.getDir().getParentFile().getParentFile().getAbsolutePath()
+                + "\\target\\classes\\static\\avatars\\";
         String path = pre + uuid + suffix;
 
         try {
             file.transferTo(new File(path));
-            return R.success(path);     //send path to frontend
+
+            String dbPath = "/avatars/" + uuid + suffix;
+            staff.setAvatar(dbPath);
+            int flag = adminMapper.updateByUserName(staff);
+
+            if (flag > 0) {
+                return R.success(null);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return R.error("upload avatar fail");
-    }    
+
+        return R.error("update fail");
+    }
 
 
     //只有以管理员身份登录之后才能访问/admin/*的所有url
@@ -223,5 +280,31 @@ public class AdminController {
         return R.error("modify the amount of fine fail");
     }
 
+    /**
+     * show the limit number of borrowed book
+     *
+     * @return
+     */
+    @GetMapping("/bookLimit")
+    public R showBookLimit() {
+        return R.success(adminMapper.showLimitNum());
+    }
+
+    /**
+     * modify the limit number of borrowed book
+     * default is 5
+     *
+     * @param bookLimit
+     * @return
+     */
+    @PutMapping("/updateLimitNumber")
+    public R updateLimitNumber(@RequestBody BookLimit bookLimit) {
+        int flag = adminMapper.updateLimitNum(bookLimit);
+
+        if (flag > 0) {
+            return R.success(null);
+        }
+        return R.error("modify the limit number fail");
+    }
 
 }

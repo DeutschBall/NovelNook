@@ -1,7 +1,7 @@
 package class4.spm.novelnook.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-/*import jakarta.persistence.Id;*/
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Reservation {
 
-/*    @Id*/
+    @Id
     int reservationid;
     int userid;
     int bookid;
