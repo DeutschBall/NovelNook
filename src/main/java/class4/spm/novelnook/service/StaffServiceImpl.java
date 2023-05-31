@@ -2,16 +2,10 @@ package class4.spm.novelnook.service;
 
 import class4.spm.novelnook.mapper.StaffMapper;
 import class4.spm.novelnook.pojo.*;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -32,46 +26,6 @@ public class StaffServiceImpl implements StaffService {
     //根据Id 找staff
     public Staff getStaffById(int userid){
         return staffMapper.getStaffById(userid);
-    }
-
-    //还书
-    public int returnBook(String borrowid, Date returntime) {
-
-        Borrow borrowRecord = staffMapper.getBorrowRecord(borrowid);
-
-        //不存在的borrowid
-        if(borrowRecord == null) {
-            return -1;
-        }
-
-        //已归还
-        if(Objects.equals(borrowRecord.getStatus(), "returned")) {
-            return -2;
-        }
-
-        //还书日期小于借书日期
-        if(returntime.getTime() < borrowRecord.getBorrowtime().getTime()) {
-            return -3;
-        }
-
-        //构建 Returned对象
-        Returned returned = new Returned();
-        returned.setBorrowid(borrowid);
-        returned.setReturntime(returntime);
-        long outDay = (returntime.getTime() - borrowRecord.getDeadline().getTime()) / (1000*60*60*24);
-        if(outDay <= 0) {
-            returned.setFineamount(0);
-            returned.setIspay(true);
-        } else {
-            returned.setFineamount((int)outDay * staffMapper.getFineRule());
-            returned.setIspay(false);
-        }
-
-        //更新数据库
-        return staffMapper.returnBookRemain(borrowRecord.getBookid())
-                * staffMapper.returnBookBorrowStatus(borrowid)
-                * staffMapper.returnBookAddReturn(returned);
-
     }
 
     //书剩余量
@@ -154,7 +108,7 @@ public class StaffServiceImpl implements StaffService {
 
 //book
     // 获取所有书信息
-    public List<Book> getAllBooks() {
+    public List<BookWithISBN> getAllBooks() {
         return staffMapper.getAllBooks();
     }
 
@@ -163,12 +117,6 @@ public class StaffServiceImpl implements StaffService {
     public int AddNewBook(String bookname, String press, String author, String publishtime, String catagory, int remain,
                           String introduction, String location) {
         return staffMapper.AddNewBook(bookname, press, author, publishtime, catagory, remain, introduction, location);
-    }
-
-    // 删除书
-    @Override
-    public int DeleteBook(int bookid) {
-        return staffMapper.DeleteBook(bookid);
     }
 
     // 更新书的信息

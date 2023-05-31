@@ -22,46 +22,46 @@ DROP TABLE IF EXISTS superuser;
 
 insert into staff values (123,'123','1','2','3','qewqe','asdad');
 CREATE  TABLE IF NOT EXISTS staff(
-                                     userid int PRIMARY KEY AUTO_INCREMENT,
-                                     password varchar(255),
-                                     firstname varchar(255),
-                                     lastname varchar(255),
-                                     email varchar(255),
-                                     telephone varchar(255),
-                                     avatar varchar(255)
+  userid int PRIMARY KEY AUTO_INCREMENT,
+  password varchar(255),
+  firstname varchar(255),
+  lastname varchar(255),
+  email varchar(255),
+  telephone varchar(255),
+  avatar varchar(255)
 );
 
 
 CREATE  TABLE IF NOT EXISTS patron(
-                                      userid int PRIMARY KEY AUTO_INCREMENT,
-                                      password VARCHAR(255),
-                                      firstname varchar(255),
-                                      lastname varchar(255),
-                                      email VARCHAR(255),
-                                      telephone varchar(255),
-                                      avatar varchar(255)
+    userid int PRIMARY KEY AUTO_INCREMENT,
+    password VARCHAR(255),
+    firstname varchar(255),
+    lastname varchar(255),
+    email VARCHAR(255),
+    telephone varchar(255),
+    avatar varchar(255)
 );
 
 
 CREATE  TABLE IF NOT EXISTS superuser(
-                                         userid int PRIMARY KEY AUTO_INCREMENT,
-                                         password VARCHAR(255),
-                                         firstname varchar(255),
-                                         lastname varchar(255),
-                                         email VARCHAR(255),
-                                         telephone varchar(255),
-                                         avatar varchar(255)
+    userid int PRIMARY KEY AUTO_INCREMENT,
+    password VARCHAR(255),
+    firstname varchar(255),
+    lastname varchar(255),
+    email VARCHAR(255),
+    telephone varchar(255),
+    avatar varchar(255)
 );
 
 #insert into admin values (123,'123','1','2','3','qewqe','asdad');
 CREATE  TABLE IF NOT EXISTS admin(
-                                     userid int PRIMARY KEY AUTO_INCREMENT,
-                                     password VARCHAR(255),
-                                     firstname varchar(255),
-                                     lastname varchar(255),
-                                     email VARCHAR(255),
-                                     telephone varchar(255),
-                                     avatar varchar(255)
+    userid int PRIMARY KEY AUTO_INCREMENT,
+    password VARCHAR(255),
+    firstname varchar(255),
+    lastname varchar(255),
+    email VARCHAR(255),
+    telephone varchar(255),
+    avatar varchar(255)
 );
 
 
@@ -100,38 +100,38 @@ CREATE TABLE IF NOT EXISTS reservation(
 );
 
 CREATE TABLE IF NOT EXISTS returned(
-                                       borrowid VARCHAR(255) PRIMARY KEY ,
-                                       returntime DATE, #还书的实际时间，还书的ddl在borrow表中
-                                       fineamount numeric(10,2), #罚款金额
-                                       ispay boolean, #是否交过罚款
-                                       FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
+                                     borrowid VARCHAR(255) PRIMARY KEY ,
+                                     returntime DATE, #还书的实际时间，还书的ddl在borrow表中
+                                     fineamount numeric(10,2), #罚款金额
+                                     ispay boolean, #是否交过罚款
+                                     FOREIGN KEY(borrowid) REFERENCES borrow(borrowid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS fine(
-                                   id int PRIMARY KEY AUTO_INCREMENT,
-                                   money numeric(10,2)
-);
+                                 id int PRIMARY KEY AUTO_INCREMENT,
+                                 money numeric(10,2)
+  );
 
 
 #5.19
 CREATE TABLE IF NOT EXISTS isbn_bookid(
-                                          isbn VARCHAR(255) PRIMARY KEY,
-                                          bookid int,
-                                          FOREIGN KEY(bookid) REFERENCES book(bookid) ON UPDATE CASCADE ON DELETE CASCADE
-);
+                                 isbn VARCHAR(255) PRIMARY KEY,
+                                 bookid int,
+                                 FOREIGN KEY(bookid) REFERENCES book(bookid) ON UPDATE CASCADE ON DELETE CASCADE
+  );
 
 #5.25
 CREATE TABLE IF NOT EXISTS booklimit(
-                                        id int PRIMARY KEY AUTO_INCREMENT,
-                                        limitnum int
-);
+                                 id int PRIMARY KEY AUTO_INCREMENT,
+                                 limitnum int
+  );
 #5.25
 CREATE TABLE IF NOT EXISTS book_realid(
-                                          realid VARCHAR(255) PRIMARY KEY,
-                                          bookid int,
-                                          borrowid VARCHAR(255),
-                                          FOREIGN KEY(bookid) REFERENCES book(bookid) ON UPDATE CASCADE ON DELETE CASCADE
-);
+                                 realid VARCHAR(255) PRIMARY KEY,
+                                 bookid int,
+                                 borrowid VARCHAR(255),
+                                 FOREIGN KEY(bookid) REFERENCES book(bookid) ON UPDATE CASCADE ON DELETE CASCADE
+  );
 
 
 # CREATE TABLE IF NOT EXISTS user(
@@ -150,48 +150,48 @@ CREATE TABLE IF NOT EXISTS book_realid(
 
 -- 生成20条随机数据 patron
 INSERT INTO patron (password, firstname, lastname, email, telephone, avatar) VALUES
-                                                                                 ('s3cr3tp@ss', 'John', 'Doe', 'johndoe@example.com', '+1-234-567-8901', 'avatars/7.svg'),
-                                                                                 ('7yN7UBG@vk', 'Jane', 'Smith', 'janesmith@example.com', '+1-345-678-9012', 'avatars/3.svg'),
-                                                                                 ('p@ssw0rd123', 'Bob', 'Johnson', 'bobjohnson@example.com', '+1-456-789-0123', 'avatars/2.svg'),
-                                                                                 ('pa$sw0rd456', 'Sarah', 'Lee', 'sarahlee@example.com', '+1-567-890-1234', 'avatars/6.svg'),
-                                                                                 ('Qwerty123!', 'David', 'Chen', 'davidchen@example.com', '+1-678-901-2345', 'avatars/10.svg'),
-                                                                                 ('myp@ssw0rd', 'Linda', 'Wang', 'lindawang@example.com', '+1-789-012-3456', 'avatars/5.svg'),
-                                                                                 ('Passw0rd', 'Eric', 'Kim', 'erickim@example.com', '+1-890-123-4567', 'avatars/8.svg'),
-                                                                                 ('starbucks', 'Emily', 'Jones', 'emilyjones@example.com', '+1-901-234-5678', 'avatars/1.svg'),
-                                                                                 ('Hello123', 'Mark', 'Davis', 'markdavis@example.com', '+1-012-345-6789', 'avatars/9.svg'),
-                                                                                 ('P@ssword123', 'Melissa', 'Lopez', 'melissalopez@example.com', '+1-123-456-7890', 'avatars/4.svg'),
-                                                                                 ('sunshine', 'Chris', 'Brown', 'chrisbrown@example.com', '+1-234-567-8901', 'avatars/2.svg'),
-                                                                                 ('pa$$word', 'Ava', 'Taylor', 'avataylor@example.com', '+1-345-678-9012', 'avatars/3.svg'),
-                                                                                 ('qwertyuiop', 'Lucas', 'Wilson', 'lucaswilson@example.com', '+1-456-789-0123', 'avatars/6.svg'),
-                                                                                 ('myPassword', 'Sophia', 'Martin', 'sophiamartin@example.com', '+1-567-890-1234', 'avatars/7.svg'),
-                                                                                 ('baseball', 'Ethan', 'Flores', 'ethanflores@example.com', '+1-678-901-2345', 'avatars/10.svg'),
-                                                                                 ('password1', 'Isabella', 'Garcia', 'isabellagarcia@example.com', '+1-789-012-3456', 'avatars/1.svg'),
-                                                                                 ('qwerty123', 'Michael', 'Bailey', 'michaelbailey@example.com', '+1-890-123-4567', 'avatars/8.svg'),
-                                                                                 ('hunter2', 'Daniel', 'Nguyen', 'danielnguyen@example.com', '+1-901-234-5678', 'avatars/4.svg'),
-                                                                                 ('iloveme', 'Olivia', 'Hernandez', 'oliviahernandez@example.com', '+1-012-345-6789', 'avatars/9.svg'),
-                                                                                 ('1234567890', 'Matthew', 'Allen', 'matthewallen@example.com', '+1-123-456-7890', 'avatars/5.svg');
+('s3cr3tp@ss', 'John', 'Doe', 'johndoe@example.com', '+1-234-567-8901', 'avatars/7.svg'),
+('7yN7UBG@vk', 'Jane', 'Smith', 'janesmith@example.com', '+1-345-678-9012', 'avatars/3.svg'),
+('p@ssw0rd123', 'Bob', 'Johnson', 'bobjohnson@example.com', '+1-456-789-0123', 'avatars/2.svg'),
+('pa$sw0rd456', 'Sarah', 'Lee', 'sarahlee@example.com', '+1-567-890-1234', 'avatars/6.svg'),
+('Qwerty123!', 'David', 'Chen', 'davidchen@example.com', '+1-678-901-2345', 'avatars/10.svg'),
+('myp@ssw0rd', 'Linda', 'Wang', 'lindawang@example.com', '+1-789-012-3456', 'avatars/5.svg'),
+('Passw0rd', 'Eric', 'Kim', 'erickim@example.com', '+1-890-123-4567', 'avatars/8.svg'),
+('starbucks', 'Emily', 'Jones', 'emilyjones@example.com', '+1-901-234-5678', 'avatars/1.svg'),
+('Hello123', 'Mark', 'Davis', 'markdavis@example.com', '+1-012-345-6789', 'avatars/9.svg'),
+('P@ssword123', 'Melissa', 'Lopez', 'melissalopez@example.com', '+1-123-456-7890', 'avatars/4.svg'),
+('sunshine', 'Chris', 'Brown', 'chrisbrown@example.com', '+1-234-567-8901', 'avatars/2.svg'),
+('pa$$word', 'Ava', 'Taylor', 'avataylor@example.com', '+1-345-678-9012', 'avatars/3.svg'),
+('qwertyuiop', 'Lucas', 'Wilson', 'lucaswilson@example.com', '+1-456-789-0123', 'avatars/6.svg'),
+('myPassword', 'Sophia', 'Martin', 'sophiamartin@example.com', '+1-567-890-1234', 'avatars/7.svg'),
+('baseball', 'Ethan', 'Flores', 'ethanflores@example.com', '+1-678-901-2345', 'avatars/10.svg'),
+('password1', 'Isabella', 'Garcia', 'isabellagarcia@example.com', '+1-789-012-3456', 'avatars/1.svg'),
+('qwerty123', 'Michael', 'Bailey', 'michaelbailey@example.com', '+1-890-123-4567', 'avatars/8.svg'),
+('hunter2', 'Daniel', 'Nguyen', 'danielnguyen@example.com', '+1-901-234-5678', 'avatars/4.svg'),
+('iloveme', 'Olivia', 'Hernandez', 'oliviahernandez@example.com', '+1-012-345-6789', 'avatars/9.svg'),
+('1234567890', 'Matthew', 'Allen', 'matthewallen@example.com', '+1-123-456-7890', 'avatars/5.svg');
 
 INSERT INTO staff (password, firstname, lastname, email, telephone, avatar) VALUES
-    ('123456', 'aaa', 'bbb', '123@ex.com', '74184561', 'avatars/5.svg');
+('123456', 'aaa', 'bbb', '123@ex.com', '74184561', 'avatars/5.svg');
 
 INSERT INTO borrow (borrowid, userid, bookid, borrowtime, deadline, status) VALUES
-                                                                                ('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing'),
-                                                                                ('brid002', '1', '2', '2023-05-05', '2023-06-05', 'borrowing'),
-                                                                                ('brid003', '1', '3', '2023-05-05', '2023-06-05', 'returned'),
-                                                                                ('brid004', '2', '4', '2023-05-05', '2023-06-05', 'borrowing'),
-                                                                                ('brid005', '3', '5', '2023-05-05', '2023-06-05', 'returned');
+('brid001', '1', '1', '2023-05-05', '2023-06-05', 'borrowing'),
+('brid002', '1', '2', '2023-05-05', '2023-06-05', 'borrowing'),
+('brid003', '1', '3', '2023-05-05', '2023-06-05', 'returned'),
+('brid004', '2', '4', '2023-05-05', '2023-06-05', 'borrowing'),
+('brid005', '3', '5', '2023-05-05', '2023-06-05', 'returned');
 
 INSERT INTO returned (borrowid, returntime, fineamount, ispay) VALUES
-                                                                   ('brid003', '2023-06-08', 3.5, 0),
-                                                                   ('brid005', '2020-06-09', 4.4, 0);
+('brid003', '2023-06-08', 3.5, 0),
+('brid005', '2020-06-09', 4.4, 0);
 
 
 
 INSERT INTO fine(money) VALUES
-    (2);
+(2);
 
 INSERT INTO booklimit(limitnum) VALUES
-    (5);
+(5);
 
 
 #==============重新生成book信息============================
@@ -258,3 +258,6 @@ values  ('100001', 1, null),
         ('500006', 5, null),
         ('500007', 5, null),
         ('500008', 5, null);
+
+
+

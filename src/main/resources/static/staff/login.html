@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link href="favicon.ico" rel="icon">
     <title>Staff Log in</title>
     <!-- Bootstrap core CSS -->
     <link href="/staff/dist_login/css/bootstrap.min.css" rel="stylesheet">
@@ -17,7 +18,7 @@
 <form class="form-signin" onsubmit="submitForm(event)" method="post">
 
     <!-- 图标-->
-    <img class="mb-4" src="/staff/dist_login/img/bootstrap-solid.svg" alt="" width="72" height="72">
+    <img class="mb-4" src="dist_login/img/favicon.svg" alt="" width="72" height="72">
 
     <h1 class="h3 mb-3 font-weight-normal">Staff Log in</h1>
 
@@ -34,7 +35,7 @@
 <!--    返回身份选择页-->
     <a class="btn btn-secondary btn-block mt-2" href="/homepage/index.html">Back</a>
 
-    <p class="mt-5 mb-3 text-muted">© 2023 SPM</p>
+    <p class="mt-5 mb-3 text-muted">© 2023</p>
 
 </form>
 
@@ -67,6 +68,21 @@
             })
             .catch(error => console.error(error));
     }
+
+    // 添加点击事件处理程序
+    document.querySelector('a').addEventListener('click', function() {
+        fetch('/staff/logout')
+            .then(response => {
+                if (response.ok) {
+                    // 成功访问/logout后，跳转到首页
+                    window.location.href = '/homepage/index.html';
+                } else {
+                    console.error('Logout failed');
+                }
+            })
+            .catch(error => console.error(error));
+    });
+
 </script>
 
 </html>

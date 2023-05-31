@@ -1,9 +1,6 @@
 package class4.spm.novelnook.service;
 
-import class4.spm.novelnook.pojo.Book;
-import class4.spm.novelnook.pojo.FineInfo;
-import class4.spm.novelnook.pojo.Patron;
-import class4.spm.novelnook.pojo.Staff;
+import class4.spm.novelnook.pojo.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
@@ -22,9 +19,6 @@ public interface StaffService {
 
     //根据Id 找staff
     Staff getStaffById(int userid);
-
-    //还书
-    int returnBook(String borrowid, Date returntime);
 
     //书剩余量
     int getBookRemain();
@@ -60,14 +54,12 @@ public interface StaffService {
 
 //book
     // 查询所有书
-    List<Book> getAllBooks();
+    List<BookWithISBN> getAllBooks();
 
     // 增加书
     int AddNewBook(String bookname, String press, String author, String publishtime, String catagory, int remain,
                    String introduction, String location);
 
-    // 删除书
-    int DeleteBook(int bookid);
 
     // 改书
     int UpdateBook(int bookid, String bookname, String press, String author, String publishtime, String catagory,
