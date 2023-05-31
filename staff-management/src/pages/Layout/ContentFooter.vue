@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
-    <div class="container">
-      <nav>
+    <div class="container" style="display: flex; justify-content: end;">
+      <!-- <nav>
         <ul>
           <li>
             <a href="https://www.creative-tim.com">Creative Tim</a>
@@ -16,12 +16,10 @@
             <a href="https://www.creative-tim.com/license"> Licenses </a>
           </li>
         </ul>
-      </nav>
-      <div class="copyright text-center">
+      </nav> -->
+      <div class="copyright">
         &copy; {{ new Date().getFullYear() }}
-        <a href="https://www.creative-tim.com/?ref=mdf-vuejs" target="_blank"
-          >Creative Tim</a
-        >, made with <i class="fa fa-heart heart"></i> for a better web
+        <a>Spm</a>, made with <i class="fa fa-heart heart"></i> for a better web
       </div>
     </div>
   </footer>
