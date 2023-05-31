@@ -2,9 +2,11 @@ package class4.spm.novelnook.mapper;
 
 
 import class4.spm.novelnook.pojo.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -14,7 +16,8 @@ public interface PatronMapper {
 
     //获取所有borrow信息
     @Select("select borrowid,bookid,bookname,location,borrowtime,deadline,status " +
-            "from book natural join borrow where userid = #{userid}")
+            "from book natural join borrow where userid = #{userid} " +
+            "order by borrowtime")
     List<BorrowRecords> getBorrowList(int userid);
 
     //获取book信息
@@ -77,7 +80,7 @@ public interface PatronMapper {
 
     //获取未支付金额
     @Select("select sum(fineamount) from returned natural join borrow where userid = #{userid} and ispay = 0")
-    int getFineAmount(int userid);
+    Double getFineAmount(int userid);
 
     //预约图书
     @Insert("insert into reservation(reservationid,userid, bookid, reservationtime, status)"+
@@ -118,5 +121,38 @@ public interface PatronMapper {
     @Update("update reservation set status = #{status} " +
             "where userid = #{userid} and bookid = #{bookid} and status != 'canceled'")
     void updateReservation(int userid, int bookid, String status);
+
+    /*-----------------------------------------------------------------------------------------*/
+
+    //
+    // release 3
+    //
+
+    //获取借书限制
+    @Select("select limitnum from booklimit")
+    Integer getBookLimit();
+
+    //更新book_realid
+    @Update("update book_realid set borrowid = #{borrowid} " +
+            "where realid in " +
+            "(select realid from (select min(realid) as realid from book_realid where bookid = #{bookid} and borrowid IS NULL ) as r)")
+    void updateBookRealid(String borrowid, int bookid);
+
+    //获取旧密码
+    @Select("select password from patron where userid = #{userid}")
+    String getOldPassword(int userid);
+
+    //修改密码
+    @Update("update patron set password = #{newPassword} where userid = #{userid}")
+    void updatePatronPassword(int userid,String newPassword);
+
+    //查询差7天还书的邮箱
+    @Select("select distinct email from patron natural join borrow where status = 'borrowing' and timestampdiff(day,#{current}, deadline ) <= 7")
+    List<String> getEmail(Date current);
+
+    //查询差7天还书的记录
+    @Select("select bookname, deadline from borrow natural join patron natural join book where email = #{email} and status = 'borrowing' and timestampdiff(day,#{current}, deadline ) <= 7")
+    List<BorrowRecords> getUnreturnedBook(String email ,Date current);
+
 
 }

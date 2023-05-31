@@ -69,6 +69,22 @@ const book = {
     //取消预约
     cancelReservation(userId, bookId) {
         return axios.get(`${base.baseURL}/cancel/${userId}/${bookId}`);
+    },
+
+    /*---------------------------------------------------------------------------*/
+
+    //
+    //release 3
+    //
+
+    //获取旧密码
+    getOldPassword(userId) {
+        return axios.get(`${base.baseURL}/getoldpwd/${userId}`)
+    },
+
+    //修改密码
+    updatePassword(userId, newPassword) {
+        return axios.get(`${base.baseURL}/updatepwd/${userId}/${newPassword}`)
     }
 }
 

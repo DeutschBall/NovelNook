@@ -2,7 +2,7 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Login from "@/pages/Login.vue";
 import Dashboard from "@/pages/Dashboard.vue";
-import UserProfile from "@/pages/UserProfile.vue";
+import UserProfile from "@/pages/UserProfile/EditProfileForm.vue";
 import TableList from "@/pages/TableList.vue";
 import Typography from "@/pages/Typography.vue";
 import Icons from "@/pages/Icons.vue";
@@ -14,7 +14,7 @@ import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
 const routes = [
   {
     path: "/",
-    redirect: "/dashboard",
+    redirect: "/login",
   },
   {
     path: "/login",

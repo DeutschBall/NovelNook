@@ -2,18 +2,26 @@ package class4.spm.novelnook.service;
 
 import class4.spm.novelnook.mapper.PatronMapper;
 import class4.spm.novelnook.pojo.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
+@EnableScheduling
 public class PatronServiceImpl implements PatronService{
 
     @Autowired
     PatronMapper patronMapper;
+    @Autowired
+    MailService mailService;
 
     //
     // 对Controller接口
@@ -39,10 +47,14 @@ public class PatronServiceImpl implements PatronService{
         String borrowstatus = patronMapper.getBorrowStatus(userid, bookid);
 
         //条件判断
+        if(patronMapper.getBorrowCount(userid)>=patronMapper.getBookLimit())
+            return "Failed: You have too many borrowing books!";
+        /*
         if(patronMapper.getOverdueCount(userid)>=5)
             return "Failed: You have too many overdue books!";
         if(Integer.parseInt(patronMapper.getFineCount(userid))>=5)
             return "Failed: You have too many unpaid fines!";
+         */
         if(borrowstatus != null && borrowstatus.equals("borrowing"))
             return "Failed: You have already borrowed the material!";
         if(updateBook(bookid) == 0)
@@ -52,8 +64,10 @@ public class PatronServiceImpl implements PatronService{
             patronMapper.updateReservation(userid, bookid, "finished");
         //添加新的borrow数据
         Date borrowtime = new Date();
+        String borrowid = String.valueOf(UUID.randomUUID());
+
         Borrow borrow = new Borrow();
-        borrow.setBorrowid(getNewBorrowId());
+        borrow.setBorrowid(borrowid);
         borrow.setUserid(userid);
         borrow.setBookid(bookid);
         borrow.setBorrowtime(borrowtime);
@@ -62,6 +76,7 @@ public class PatronServiceImpl implements PatronService{
 
         //更新数据库
         patronMapper.addBorrow(borrow);
+        patronMapper.updateBookRealid(borrowid, bookid);
         return "Success!";
     }
 
@@ -91,8 +106,8 @@ public class PatronServiceImpl implements PatronService{
         return patronMapper.getTicketList(userid);
     }
 
-    //获取未支付金额
-    public int getFineAmount(int userid) {
+    //获取罚款金额
+    public Double  getFineAmount(int userid) {
         return patronMapper.getFineAmount(userid);
     }
 
@@ -123,6 +138,40 @@ public class PatronServiceImpl implements PatronService{
         patronMapper.updateReservation(userid, bookid, "canceled");
     }
 
+    /*------------------------------------------------------------------------------------------*/
+
+    //
+    // release 3
+    //
+
+    //获取旧密码
+    public String getOldPassword(int userid) {
+        return patronMapper.getOldPassword(userid);
+    }
+
+    //修改密码
+    public void updatePatronPassword(int userid, String newPassword) {
+        patronMapper.updatePatronPassword(userid, newPassword);
+    }
+
+    //定时发送邮件
+    @Scheduled(cron ="0 0 12 * * ?")   //设置发送时间：秒、分、时、日、月、周，*代表所有值，？代表不指定，当前设置为每天12：00
+    public void sendEmail(){
+        Date current = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> emails = patronMapper.getEmail(current);
+        StringBuilder text = new StringBuilder("");
+        System.out.println(emails);
+        for (String email : emails) {
+            List<BorrowRecords> books = patronMapper.getUnreturnedBook(email, current);
+            for(BorrowRecords book : books) {
+                text.append(book.getBookname()).append(" - Deadline:").append(sdf.format(book.getDeadline())).append("\n");
+            }
+            mailService.sendMail(email, text.toString());
+
+        }
+    }
+
     //
     // 辅助方法
     //
@@ -144,6 +193,7 @@ public class PatronServiceImpl implements PatronService{
         return c.getTime();
     }
 
+    /*
     //获取最新borrowid
     //在数据库中最大borrowid基础上+1
     String getNewBorrowId() {
@@ -157,5 +207,6 @@ public class PatronServiceImpl implements PatronService{
         n = Math.min(n, newnum.length());
         return maxid.subSequence(0,maxid.length()-n) + newnum;
     }
+     */
 
 }
